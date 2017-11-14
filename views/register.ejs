@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Vixip
+    </title>
+    <!--Vue-->
+    <script src="/javascripts/vue.js"></script>
+    <script src="/javascripts/vue-resource.js"></script>
+    <!-- Bootstrap -->
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
+    <!--Flat UI-->
+    <link href="/stylesheets/flat-ui.css" rel="stylesheet">
+    <!--User-->
+    <link rel='stylesheet' href='/stylesheets/register.css' />
+</head>
+
+<body>
+    <!-- Fixed navbar -->
+    <style>
+        body {
+            /*min-height: 2000px;*/
+            padding-top: 70px;
+        }
+    </style>
+    <div id="app">
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>  
+                </button>
+                    <a class="navbar-brand" href="/">Vixip</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="#">About us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" id="body">
+            <form class="col-sm-offset-4 col-sm-4 form-horizontal" role="form" method="post" onsubmit="return false">
+                <fieldset>
+                    <legend></legend>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <p class="tc">注册信息</p>
+                        </div>
+                        <div class="panel-body m15">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-user"></span>
+                                    </span>
+                                    <input type="text" class="form-control" id="username" name="username" v-model="username" placeholder="请输入用户名" required>
+                                </div>
+                            </div>
+                            <template v-if="usertype !== 'o'">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-envelope"></span>
+                                    </span>
+                                    <input type="text" class="form-control" id="alipay-address" name="alipay-address" v-model="alipay_address" placeholder="请输入邮箱地址" required>
+                                </div>
+                            </div>
+                            </template>
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-lock"></span>
+                                    </span>
+                                    <input type="password" class="form-control" id="password" name="password" v-model="password" placeholder="请输入密码" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-lock"></span>
+                                    </span>
+                                    <input type="password" class="form-control" id="password1" name="password1" v-model="repeatPwd" placeholder="请再次输入密码" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="radio radio-inline sr-only"></label>
+                                <label class="radio radio-inline" for="radio4o">
+                                    <input type="radio" name="optionsRadios" data-toggle="radio" value="o" id="radio4o" v-model="usertype" required>
+                                    origin
+                                </label>
+                                <label class="radio radio-inline" for="radio4p">
+                                    <input type="radio" name="optionsRadios" data-toggle="radio" value="p" id="radio4p" v-model="usertype" required>
+                                    painter
+                                </label>
+                                <label class="radio radio-inline" for="radio4b">
+                                    <input type="radio" name="optionsRadios" data-toggle="radio" value="b" id="radio4b" v-model="usertype" required>
+                                    buyer
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary btn-block" id="register1" @click="register" :disabled="iserror">注册</button>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-info btn-block" id="login1" @click="login">登录</button>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="warning">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{status}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{message}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--footer part-->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10">
+                        <p>Vixip by SJTU
+                        </p>
+                    </div>
+                    <div class="col-md-2">
+                        <p><a href="#">&copy; 联系我们</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/javascripts/jquery.js "></script>
+    <script src="/javascripts/flat-ui.js "></script>
+    <script src="/javascripts/application.js"></script>
+    <!-- 注意bind的js必须放在页面的最后 -->
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                username: "",
+                alipay_address: "",
+                password: "",
+                repeatPwd: "",
+                usertype: "",
+                status: "",
+                message: ""
+            },
+            computed: {
+                iserror: function() {
+                    if (this.username !== "" && this.password === this.repeatPwd && this.password !== "" && this.repeatPwd !== "" && this.usertype !== "") {
+                        if (this.usertype === "o") {
+                            return false;
+                        } else {
+                            if (this.alipay_address !== "" && testEmail(this.alipay_address)) {
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                }
+            },
+            methods: {
+                login: function() {
+                    location.href = 'login';
+                },
+                register: function() {
+                    if (this.iserror == false) {
+                        var data = {
+                            "username": this.username,
+                            "password": this.password,
+                            "alipay_address": this.alipay_address,
+                            "usertype": this.usertype
+                        };
+                        this.$http.post('/register/reg', data).then(
+                            function(response) {
+                                if (response.data.status == 1) {
+                                    app.status = "Success!";
+                                    app.message = response.data.msg;
+                                    setTimeout(function() {
+                                        location.href = '/login';
+                                    }, 2000);
+                                    $('#warning').modal({});
+                                } else if (response.data.status == 0) {
+                                    app.status = "Error!";
+                                    app.message = `Something wrong while register ERR:${response.data.msg}`;
+                                    $('#warning').modal({});
+                                }
+                            },
+                            function(err) {
+                                console.log(err);
+                            }
+                        )
+                    }
+                }
+            }
+
+        });
+
+        function testEmail(str) {
+            var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+            if (reg.test(str)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+</body>
+</head>
+
+</html>

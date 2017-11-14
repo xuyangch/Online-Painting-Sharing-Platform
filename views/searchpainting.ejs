@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Vixip
+    </title>
+    <!--Vue-->
+    <script src="/javascripts/vue.js"></script>
+    <script src="/javascripts/vue-resource.js"></script>
+    <!-- Bootstrap -->
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
+    <!--Flat UI-->
+    <link href="/stylesheets/flat-ui.css" rel="stylesheet">
+    <!--User-->
+    <link rel='stylesheet' href='/stylesheets/searchpainting.css' />
+</head>
+
+<body>
+    <!-- Fixed navbar -->
+    <style>
+        body {
+            /*min-height: 2000px;*/
+            padding-top: 70px;
+        }
+    </style>
+    <!--<img id='bg' src='/img/main-bg.jpg' />-->
+    <!--this is for Vue-->
+    <div id="app">
+
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>  
+                    </button>
+                    <a class="navbar-brand" href="/homepage">Vixip</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <form class="navbar-form navbar-left" action="#" role="search">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input class="form-control" id="navbarInput-01" type="search" placeholder="Search User">
+                                <span class="input-group-btn">
+                      <a type="button" class="btn" href="/search/user"><span class="fui-search"></span></a>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/homepage">Home page</a></li>
+                        <li><a href="/homepage/addcontribute">New Contribution</a></li>
+                        <!--<li><a href="/homepage/collect">Collection</a></li>-->
+                        <li><a href="/trade/tradehomepage">Trade Home</a></li>
+                        <li><a href="/homepage/config"><span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span><span class="visible-md visible-lg"><span class="fui-gear"></span></span></a></li>
+                        <li><a @click="quit"><span class="fui-exit"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--webpage body-->
+        <div id="header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="user">
+                            <div class="user-header">
+                                <img alt="..." class="img-circle img-responsive" src="<%=user_header %>" />
+                            </div>
+                            <div class="intro last">
+                                <h4 @click="gotohomepage">
+                                    <%=username %>
+                                </h4>
+                                <br/>
+                                <button class="btn btn-primary btn-hg" @click="follow">Follow</button>
+                            </div>
+                        </div>
+                        <!--the others are the same-->
+                    </div>
+
+                    <div class="col-md-9 ">
+                        <div class="panel panel-default ">
+                            <div class="panel-heading "><a href="#">Search Painting</a></div>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    <form action="#" role="search">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">ID</span>
+                                                <input class="form-control" type="text" placeholder="ID Number" v-model="ID" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Topic</span>
+                                                <input class="form-control" type="text" placeholder="Topic" v-model="topic" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Tag</span>
+                                                <input class="form-control" type="text" placeholder="tag" v-model="tag" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"> >Star</span>
+                                                <input class="form-control" type="text" placeholder="1000" v-model="star" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"> >View Count</span>
+                                                <input class="form-control" type="text" placeholder="1000" v-model="view" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="radio radio-inline" for="radio5a">
+                                                <input type="radio" name="optionsRadios" data-toggle="radio" value="1" id="radio5a" required > Order By ID
+                                            </label>
+                                            <label class="radio radio-inline" for="radio5b"> 
+                                                <input type="radio" name="optionsRadios" data-toggle="radio" value="2" id="radio5b" required > Order By Star
+                                            </label>
+                                            <label class="radio radio-inline" for="radio5c">
+                                                <input type="radio" name="optionsRadios" data-toggle="radio" value="3" id="radio5c" required > Order By View Count
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-2 col-lg-offset-10">
+                                                <button class="btn btn-block btn-primary" :disabled="update2" @click="searchpainting">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <template v-if="paintings.length !== 0">
+                                        <template v-for="(painting, i) in paintings">
+                                            <template v-if="i%3==0">
+                                                <div class="row" >
+                                            </template>
+                                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 ">
+                                        <div class="tile">
+                                            <img :src="painting.url" alt="Infinity-Loop" class="tile-image" />
+                                            <h3 class="tile-title ">
+                                                {{painting.name}}
+                                            </h3>
+                                            <!--<p>Vector-based shapes and minimum of layer styles.</p>-->
+                                            <a class="btn btn-primary btn-large btn-block " :href="'/illust?paintingID='+painting.paintingID">More</a>
+                                            <span class="fui-star-2 pull-left">{{painting.upvote}}</span>
+                                            <span class="glyphicon glyphicon-eye-open">{{painting.pageView}}</span>
+                                        </div>
+                                    </div>
+                                    <template v-if="i%3==2">
+                                                </div>
+                                            </template>
+
+                                    </template>
+                                    <template v-if="paintings.length%3!=0">
+                                                </div>
+                                            </template>
+                                    </template>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="warning">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{status}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{message}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--footer part-->
+        <footer>
+            <div class="container ">
+                <div class="row ">
+                    <div class="col-md-10 ">
+                        <p>Vixip by SJTU
+                        </p>
+                    </div>
+                    <div class="col-md-2 ">
+                        <p><a href="# ">&copy; 联系我们</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    <script src="/javascripts/jquery.js "></script>
+    <script src="/javascripts/flat-ui.js "></script>
+    <script src="/javascripts/application.js"></script>
+    <!-- 注意bind的js必须放在页面的最后 -->
+    <script type="text/javascript ">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                userID: '<%=userID %>',
+                status: "",
+                message: "",
+                paintings: [],
+                ID: "",
+                topic: "",
+                tag: "",
+                star: "",
+                view: "",
+                order: 0,
+                data: {},
+                isProcess: false
+            },
+            computed: {
+                update2: function() {
+                    if (this.ID !== "" || this.topic !== "" || this.star !== "" || this.view !== "" || this.tag !== "") {
+                        if (!this.isProcess && this.order !== 0) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            },
+            methods: {
+                follow: function() {
+                    this.$http.get(`/homepage/addfollowing?userID=${this.userID}`).then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                $('#warning').modal({});
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                },
+                gotohomepage: function() {
+                    location.href = `/homepage?userID=${this.userID}`;
+                },
+                quit: function() {
+                    this.$http.get('/homepage/quit').then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                setTimeout(function() {
+                                    location.href = '/login';
+                                }, 2000);
+                                $('#warning').modal({});
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                },
+                searchpainting: function() {
+                    this.data = {};
+                    if (this.ID != "") {
+                        this.data.byID = this.ID;
+                    }
+                    if (this.topic != "") {
+                        this.data.byTopic = this.topic;
+                    }
+                    if (this.tag != "") {
+                        this.data.byTag = this.tag;
+                    }
+                    if (this.star != "") {
+                        this.data.byUpvote = this.star;
+                    }
+
+                    if (this.view != "") {
+                        this.data.byPageView = this.view;
+                    }
+                    if (this.order == 1) {
+                        this.data.OrderByID = true;
+                    } else if (this.order == 2) {
+                        this.data.OrderByUpvote = true;
+                    } else if (this.order == 3) {
+                        this.data.OrderByPageView = true;
+                    }
+                    this.data.offset = 0;
+                    this.isProcess = true;
+                    this.$http.post('/search/painting', this.data).then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                // app.status = "Success!";
+                                // app.message = response.data.msg;
+                                // $('#warning').modal({});
+                                app.paintings = response.data.painting;
+                                app.isProcess = false;
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                app.isProcess = false;
+                                app.data = {};
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                            app.isProcess = false;
+                        }
+                    )
+                }
+            }
+        });
+        $(function() {
+            $(':radio').on('change.radiocheck', function(event) {
+                app.order = Number($(event.target)[0].value);
+            });
+        });
+        $(window).scroll(function() {　　
+            var scrollTop = $(this).scrollTop();　　
+            var scrollHeight = $(document).height();　　
+            var windowHeight = $(this).height();　　
+            if (scrollTop + windowHeight >= scrollHeight) {　　　　
+                console.log("已经到最底部了！");
+                if (!isEmptyObject(app.data) && !app.isProcess) {
+                    app.data.offset = app.paintings.length;
+                    app.isProcess = true;
+                    app.$http.post('/search/painting', app.data).then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                for (var i = 0; i < response.data.painting.length; i++) {
+                                    var element = response.data.painting[i];
+                                    app.paintings.push(element);
+                                }
+                                app.isProcess = false;
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                app.isProcess = false;
+                                app.data = {};
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                            app.isProcess = false;
+                        }
+                    )
+                }　　
+            }
+        });
+
+        function isEmptyObject(obj) {
+            for (var key in obj) {
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+
+</html>

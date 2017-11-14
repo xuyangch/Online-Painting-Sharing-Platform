@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Vixip
+    </title>
+    <!--Vue-->
+    <script src="/javascripts/vue.js"></script>
+    <script src="/javascripts/vue-resource.js"></script>
+    <!-- Bootstrap -->
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
+    <!--Flat UI-->
+    <link href="/stylesheets/flat-ui.css" rel="stylesheet">
+    <!--User-->
+    <link rel='stylesheet' href='/stylesheets/searchtrade.css' />
+</head>
+
+<body>
+    <!-- Fixed navbar -->
+    <style>
+        body {
+            /*min-height: 2000px;*/
+            padding-top: 70px;
+        }
+    </style>
+    <!--<img id='bg' src='/img/main-bg.jpg' />-->
+    <!--this is for Vue-->
+    <div id="app">
+
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>  
+                    </button>
+                    <a class="navbar-brand" href="/homepage">Vixip</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <form class="navbar-form navbar-left" action="#" role="search">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input class="form-control" id="navbarInput-01" type="search" placeholder="Search Painting">
+                                <span class="input-group-btn">
+                      <a type="button" class="btn" href="/search/painting"><span class="fui-search"></span></a>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/homepage">Home page</a></li>
+                        <li><a href="/homepage/addcontribute">New Contribution</a></li>
+                        <!--<li><a href="/homepage/collect">Collection</a></li>-->
+                        <li><a href="/trade/tradehomepage">Trade Home</a></li>
+                        <li><a href="/homepage/config"><span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span><span class="visible-md visible-lg"><span class="fui-gear"></span></span></a></li>
+                        <li><a @click="quit"><span class="fui-exit"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--webpage body-->
+        <div id="header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="user">
+                            <div class="user-header">
+                                <img alt="..." class="img-circle img-responsive" src="<%=user_header %>" />
+                            </div>
+                            <div class="intro last">
+                                <h4 @click="gotohomepage">
+                                    <%=username %>
+                                </h4>
+                                <br/>
+                                <button class="btn btn-primary btn-hg" @click="follow">Follow</button>
+                            </div>
+                        </div>
+                        <!--the others are the same-->
+                    </div>
+
+                    <div class="col-md-9 ">
+                        <div class="panel panel-default ">
+                            <div class="panel-heading "><a href="#">Search Trade</a></div>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    <form action="#" role="search">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Tag</span>
+                                                <input class="form-control" type="text" placeholder="Tag" v-model="tag" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Description</span>
+                                                <input class="form-control" type="text" placeholder="ooxx" v-model="desc" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-2 col-lg-offset-10">
+                                                <button class="btn btn-block btn-primary" :disabled="update2" @click="searchtrade">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <template v-if="trades.length !== 0">
+                                        <template v-for="trade in trades">
+                                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 ">
+                                                <div class="tile">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon" data-placement="top" data-toggle="tooltip" data-original-title="buyer"><span class="fui-user"></span></span>
+                                                            <a class="form-control flat" :href="'/homepage?userID=' + trade.buyer">
+                                                                {{trade.buyername}}
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon" data-placement="top" data-toggle="tooltip" data-original-title="price"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span></span>
+                                                            <p class="form-control flat">
+                                                                {{trade.price}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon" data-placement="top" data-toggle="tooltip" data-original-title="deadline"><span class="fui-calendar"></span></span>
+                                                            <p class="form-control flat">
+                                                                {{ (new Date(trade.ddl)).toLocaleString() }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon" data-placement="top" data-toggle="tooltip" data-original-title="status">
+                                                                <span class="glyphicon glyphicon-tasks" aria-hidden="true">
+                                                                </span>
+                                                            </span>
+                                                            <p class="form-control flat">
+                                                                {{trade.state}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <a class="btn btn-primary btn-large btn-block " :href="'/trade/getTrade?tradeID=' + trade.tradeID">More</a>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="warning">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{status}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{message}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--footer part-->
+        <footer>
+            <div class="container ">
+                <div class="row ">
+                    <div class="col-md-10 ">
+                        <p>Vixip by SJTU
+                        </p>
+                    </div>
+                    <div class="col-md-2 ">
+                        <p><a href="# ">&copy; 联系我们</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    <script src="/javascripts/jquery.js "></script>
+    <script src="/javascripts/flat-ui.js "></script>
+    <script src="/javascripts/application.js"></script>
+    <!-- 注意bind的js必须放在页面的最后 -->
+    <script type="text/javascript ">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                userID: '<%=userID %>',
+                status: "",
+                message: "",
+                trades: [],
+                tag: "",
+                desc: "",
+                data: {},
+                isProcess: false
+            },
+            computed: {
+                update2: function() {
+                    if (this.tag !== "" || this.desc !== "") {
+                        if (!this.isProcess) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            },
+            methods: {
+                follow: function() {
+                    this.$http.get(`/homepage/addfollowing?userID=${this.userID}`).then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                $('#warning').modal({});
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                },
+                gotohomepage: function() {
+                    location.href = `/homepage?userID=${this.userID}`;
+                },
+                quit: function() {
+                    this.$http.get('/homepage/quit').then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                setTimeout(function() {
+                                    location.href = '/login';
+                                }, 2000);
+                                $('#warning').modal({});
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                },
+                searchtrade: function() {
+                    this.data = {};
+                    if (this.tag != "") {
+                        this.data.byTag = this.tag;
+                    }
+                    if (this.desc != "") {
+                        this.data.byDesc = this.desc;
+                    }
+                    this.data.offset = 0;
+                    this.isProcess = true;
+                    this.$http.post('/search/trade', this.data).then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.trades = response.data.trade;
+                                app.isProcess = false;
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                app.isProcess = false;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                            app.isProcess = false;
+                        }
+                    )
+                }
+            }
+        });
+
+        $(window).scroll(function() {　　
+            var scrollTop = $(this).scrollTop();　　
+            var scrollHeight = $(document).height();　　
+            var windowHeight = $(this).height();　　
+            if (scrollTop + windowHeight >= scrollHeight) {　　　　
+                console.log("已经到最底部了！");
+                if (!isEmptyObject(app.data) && !app.isProcess) {
+                    app.data.offset = app.trades.length;
+                    app.isProcess = true;
+                    app.$http.post('/search/trade', app.data).then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                for (var i = 0; i < response.data.trade.length; i++) {
+                                    var element = response.data.trade[i];
+                                    app.trades.push(element);
+                                }
+                                app.isProcess = false;
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                app.isProcess = false;
+                                app.data = {};
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                            app.isProcess = false;
+                        }
+                    )
+                }　　
+            }
+        });
+
+        function isEmptyObject(obj) {
+            for (var key in obj) {
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+
+</html>

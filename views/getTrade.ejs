@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Vixip
+    </title>
+    <!--Vue-->
+    <script src="/javascripts/vue.js"></script>
+    <script src="/javascripts/vue-resource.js"></script>
+    <!-- Bootstrap -->
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
+    <!--Flat UI-->
+    <link href="/stylesheets/flat-ui.css" rel="stylesheet">
+    <!--User-->
+    <link rel='stylesheet' href='/stylesheets/getTrade.css' />
+</head>
+
+<body>
+    <!-- Fixed navbar -->
+    <style>
+        body {
+            /*min-height: 2000px;*/
+            padding-top: 70px;
+        }
+    </style>
+    <!--<img id='bg' src='/img/main-bg.jpg' />-->
+    <!--this is for Vue-->
+    <div id="app">
+
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>  
+                    </button>
+                    <a class="navbar-brand" href="/homepage">Vixip</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <form class="navbar-form navbar-left" action="#" role="search">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input class="form-control" id="navbarInput-01" type="search" placeholder="Search Trade">
+                                <span class="input-group-btn">
+                      <a type="button" class="btn" href="/search/trade"><span class="fui-search"></span></a>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/trade/tradehomepage">Trade Home</a></li>
+                        <li><a href="/trade/initTrade">Init Trade</a></li>
+                        <li><a href="/trade">All Trade</a></li>
+                        <li><a href="/homepage/config"><span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span><span class="visible-md visible-lg"><span class="fui-gear"></span></span></a></li>
+                        <li><a @click="quit"><span class="fui-exit"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--webpage body-->
+        <div id="header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 ">
+                        <div class="panel panel-default ">
+                            <div class="panel-heading ">
+                                <a href="#">
+                                    Trade#<%=trade.id %>
+                                </a>
+                            </div>
+
+                            <div class="panel-body">
+                                <form role="form">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">买家</span>
+                                            <p class="form-control">
+                                                <%=buyername %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">简介</span>
+                                            <textarea class="form-control" rows="3">
+                                                <%=trade.description %>
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">价格</span>
+                                            <p class="form-control">
+                                                <%=trade.price %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">创建时间</span>
+                                            <p class="form-control">
+                                                <%=trade.create_time %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">截止时间</span>
+                                            <p class="form-control">
+                                                <%=trade.deadline %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">完成时间</span>
+                                            <p class="form-control">
+                                                <%=trade.finish_time %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">状态</span>
+                                            <p class="form-control">
+                                                <%=trade.status %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">画师</span>
+                                            <p class="form-control">
+                                                <%=respondername %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </form>
+                                <% if(type !== 0) { %>
+                                    <% if(isBuyer && trade.status == "Calling") { %>
+                                        <form role="form" class="form-inline">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">选择画师</span>
+                                                    <p></p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <select data-toggle="select" class="form-control select select-inverse" id="selectApplier" v-model="selectedID">   
+                                                <% for(var i=0;i<applier.length;i++) { %> 
+                                                <option value="<%=applier[i].userID %>" ><%=applier[i].username %></option>
+                                                <% } %>
+                                            </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-primary" @click="confirm">Confirm</button>
+                                            </div>
+                                        </form>
+                                        <% } %>
+                                            <% if(isBuyer && url) { %>
+                                                <div class="col-lg-12">
+                                                    <img src="<%=url %>" class="img-thumbnail img-responsive" />
+                                                </div>
+                                                <% } %>
+                            </div>
+                            <% if(type === 1 && !isApplied && !isResponded) { %>
+                                <div class="panel-footer">
+                                    <button type="button" class="btn btn-primary btn-block" @click="apply">Apply</button>
+                                </div>
+                                <% } %>
+                                    <% if(isResponded || isBuyer || isApplied) { %>
+                                        <div class="panel-footer">
+                                            <% if(isResponded && trade.status == "Creating") { %>
+                                                <a class="btn btn-primary btn-large btn-block " href="<%='/trade/getTrade/uploadWork?tradeID='+trade.id %>">Upload Work</a>
+                                                <% } %>
+                                                    <% if(isBuyer && trade.status == "Complete") { %>
+                                                        <button type="button" class="btn btn-primary btn-large btn-block " @click="completeTrade">Confirm</button>
+                                                        <% } %>
+                                                            <button type="button" class="btn btn-danger btn-large btn-block " @click="cancelTrade">Cancel</button>
+                                        </div>
+                                        <% } %>
+                                            <% } %>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="warning">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{status}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{message}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--footer part-->
+        <footer>
+            <div class="container ">
+                <div class="row ">
+                    <div class="col-md-10 ">
+                        <p>Vixip by SJTU
+                        </p>
+                    </div>
+                    <div class="col-md-2 ">
+                        <p><a href="# ">&copy; 联系我们</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    <script src="/javascripts/jquery.js "></script>
+    <script src="/javascripts/flat-ui.js "></script>
+    <script src="/javascripts/application.js"></script>
+    <!-- 注意bind的js必须放在页面的最后 -->
+    <script type="text/javascript ">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                tradeID: '<%=trade.id %>',
+                selectedID: "",
+                status: "",
+                message: "",
+            },
+            methods: {
+                quit: function() {
+                    this.$http.get('/homepage/quit').then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                setTimeout(function() {
+                                    location.href = '/login';
+                                }, 2000);
+                                $('#warning').modal({});
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                },
+                apply: function() {
+                    this.$http.get(`/trade/getTrade/applyfortrade?tradeID=${this.tradeID}`).then(function(response) {
+                        if (response.data.status == 1) {
+                            app.status = "Success!";
+                            app.message = response.data.msg;
+                            $('#warning').modal({});
+                        } else if (response.data.status == 0) {
+                            app.status = "Error!";
+                            app.message = `Something wrong while following ERR:${response.data.msg}`;
+                            $('#warning').modal({});
+                        }
+                    }, function(err) {
+                        console.log(err);
+                    })
+                },
+                confirm: function() {
+                    this.$http.get(`/trade/getTrade/selectpainter?tradeID=${this.tradeID}&painterID=${this.selectedID}`).then(function(response) {
+                        if (response.data.status == 1) {
+                            app.status = "Success!";
+                            app.message = response.data.msg;
+                            $('#warning').modal({});
+                        } else if (response.data.status == 0) {
+                            app.status = "Error!";
+                            app.message = `Something wrong while following ERR:${response.data.msg}`;
+                            $('#warning').modal({});
+                        }
+                    }, function(err) {
+                        console.log(err);
+                    })
+                },
+                cancelTrade: function() {
+                    this.$http.get(`/trade/cancelTrade?tradeID=${this.tradeID}`).then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                $('#warning').modal({});
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                },
+                completeTrade: function() {
+                    this.$http.get(`/trade/completeTrade?tradeID=${this.tradeID}`).then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                $('#warning').modal({});
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                }
+            }
+        });
+        $(function() {
+            $('[data-toggle=tooltip]').tooltip('hide');
+            $('#selectApplier').on('change', function(e) {
+                // console.log(e.val);
+                app.selectedID = e.val;
+            });
+        });
+    </script>
+</body>
+
+</html>

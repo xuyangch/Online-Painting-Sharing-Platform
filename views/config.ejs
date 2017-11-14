@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Vixip
+    </title>
+    <!--Vue-->
+    <script src="/javascripts/vue.js"></script>
+    <script src="/javascripts/vue-resource.js"></script>
+    <!-- Bootstrap -->
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
+    <!--Flat UI-->
+    <link href="/stylesheets/flat-ui.css" rel="stylesheet">
+    <!--User-->
+    <link rel='stylesheet' href='/stylesheets/config.css' />
+</head>
+
+<body>
+    <!-- Fixed navbar -->
+    <style>
+        body {
+            /*min-height: 2000px;*/
+            padding-top: 70px;
+        }
+    </style>
+    <!--<img id='bg' src='/img/main-bg.jpg' />-->
+    <!--this is for Vue-->
+    <div id="app">
+
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>  
+                    </button>
+                    <a class="navbar-brand" href="/homepage">Vixip</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <form class="navbar-form navbar-left" action="#" role="search">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input class="form-control" id="navbarInput-01" type="search" placeholder="Search Painting">
+                                <span class="input-group-btn">
+                      <a type="button" class="btn" href="/search/painting"><span class="fui-search"></span></a>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/homepage">Home page</a></li>
+                        <li><a href="/homepage/addcontribute">New Contribution</a></li>
+                        <!--<li><a href="/homepage/collect">Collection</a></li>-->
+                        <li><a href="/trade/tradehomepage">Trade Home</a></li>
+                        <li><a href="/homepage/config"><span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span><span class="visible-md visible-lg"><span class="fui-gear"></span></span></a></li>
+                        <li><a @click="quit"><span class="fui-exit"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--webpage body-->
+        <div id="header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="user">
+                            <div class="user-header">
+                                <img alt="..." class="img-circle img-responsive" src="<%=user_header %>" />
+                            </div>
+                            <div class="intro last">
+                                <h4 @click="gotohomepage">
+                                    <%=username %>
+                                </h4>
+                                <br/>
+                                <button class="btn btn-primary btn-hg" @click="follow">Follow</button>
+                            </div>
+                        </div>
+                        <!--the others are the same-->
+                    </div>
+
+                    <div class="col-md-9 ">
+                        <div class="panel panel-default">
+                            <div class="panel-heading "><a href="#">Pay Charge</a></div>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <label for="inputMoney" class="col-lg-2 control-label">InCharge Mnoey</label>
+                                            <div class="col-lg-10 input-group">
+                                                <span class="input-group-addon"><span class="glyphicon glyphicon-usd"></span></span>
+                                                <input type="text" class="form-control" id="inputMoney" v-model.number="newMoney" placeholder="0" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputTotal" class="col-lg-2 control-label">Current Money</label>
+                                            <div class="col-lg-10">
+                                                <p type="text" class="form-control-static" id="inputTotal">{{totalMoney}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputFreezing" class="col-lg-2 control-label">Freezing Money</label>
+                                            <div class="col-lg-10">
+                                                <p type="text" class="form-control-static" id="inputFreezing">
+                                                    <%=frozen_money %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-2 col-lg-10">
+                                                <button type="button" class="btn btn-primary" :disabled="update0" @click="charge">Charge</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default ">
+                            <div class="panel-heading "><a href="#">User Config</a></div>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <label for="inputUsername" class="col-lg-2 control-label">New User Name</label>
+                                            <div class="col-lg-10">
+                                                <input type="text" class="form-control" id="inputUsername" v-model="newUsername" placeholder="<%=username %>" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputEmail" class="col-lg-2 control-label">New Email Address</label>
+                                            <div class="col-lg-10">
+                                                <input type="email" class="form-control" id="inputEmail" v-model="newAlipay" placeholder="<%=alipay %>" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputTwitter" class="col-lg-2 control-label">twitter</label>
+                                            <div class="col-lg-10">
+                                                <input type="text" class="form-control" id="inputTwitter" v-model="newTwitter" placeholder="<%=twitter %>" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputphomepage" class="col-lg-2 control-label">Personal Homepage</label>
+                                            <div class="col-lg-10">
+                                                <input type="text" class="form-control" id="inputphomepage" v-model="newPhomepage" placeholder="<%=phomepage %>" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputabstract" class="col-lg-2 control-label">Personal Abstract</label>
+                                            <div class="col-lg-10">
+                                                <textarea class="form-control" rows="3" id="inputabstract" v-model="newAbstract" placeholder="<%=abstract %>">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-2 col-lg-10">
+                                                <button type="button" class="btn btn-primary" :disabled="update1" @click="updateUser">Update</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading "><a href="#">User Header</a></div>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <label for="inputUsername" class="col-lg-2 control-label">Upload Header Image File</label>
+                                            <div class="col-lg-8">
+                                                <p class="form-control-static" id="inputUsername">{{ newFilename }}</p>
+                                            </div>
+                                            <div class="col-lg-2 upfilebox">
+                                                <input type="file" id="InputFile" @change="getFiles">
+                                                <button class="btn btn-primary btn-block">Browse</button>
+                                            </div>
+                                        </div>
+
+                                        <div v-if="!isImage">
+                                            <div class="form-group">
+                                                <label for="newImage" class="col-lg-2 control-label">Image Header</label>
+                                                <div class="col-lg-2">
+                                                    <img :src="newImagePath" class="img-thumbnail" id="newImage" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-2 col-lg-10">
+                                                <button type="button" class="btn btn-primary" :disabled="isImage" @click="updateHeader">Update</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default ">
+                            <div class="panel-heading "><a href="#">Password</a></div>
+                            <div class="panel-body ">
+                                <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <label for="inputOldPwd" class="col-lg-2 control-label">Old Password</label>
+                                            <div class="col-lg-10">
+                                                <input type="password" class="form-control" id="inputOldPwd" v-model="oldPassword" placeholder="Old Password" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputNewPwd" class="col-lg-2 control-label">New Password</label>
+                                            <div class="col-lg-10">
+                                                <input type="password" class="form-control" id="inputNewPwd" v-model="newPassword" placeholder="New Password" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputRepPwd" class="col-lg-2 control-label">Repeat New Password</label>
+                                            <div class="col-lg-10">
+                                                <input type="password" class="form-control" id="inputRepPwd" v-model="repNewPassword" placeholder="New Password" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-2 col-lg-10">
+                                                <button type="button" class="btn btn-primary" :disabled="update2" @click="updatePwd">Update</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="warning">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{status}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{message}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--footer part-->
+        <footer>
+            <div class="container ">
+                <div class="row ">
+                    <div class="col-md-10 ">
+                        <p>Vixip by SJTU
+                        </p>
+                    </div>
+                    <div class="col-md-2 ">
+                        <p><a href="# ">&copy; 联系我们</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    <script src="/javascripts/jquery.js "></script>
+    <script src="/javascripts/flat-ui.js "></script>
+    <script src="/javascripts/application.js"></script>
+    <!-- 注意bind的js必须放在页面的最后 -->
+    <script type="text/javascript ">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                userID: '<%=userID %>',
+                oldUsername: '<%=username %>',
+                oldAlipay: '<%=alipay %>',
+                oldTwitter: '<%=twitter %>',
+                oldPhomepage: '<%=phomepage %>',
+                oldAbstract: '<%=abstract %>',
+                totalMoney: '<%=current_money %>',
+                newMoney: 0,
+                status: "",
+                message: "",
+                newUsername: "",
+                newAlipay: "",
+                newTwitter: "",
+                newPhomepage: "",
+                newAbstract: "",
+                files: [],
+                newFilename: "Please select file",
+                newImage: null,
+                newImagePath: "",
+                isImage: true,
+                oldPassword: "",
+                newPassword: "",
+                repNewPassword: ""
+
+            },
+            computed: {
+                update0: function() {
+                    if (!isNumber(this.newMoney) || this.newMoney == 0) {
+                        return true;
+                    }
+                    return false;
+                },
+                update1: function() {
+                    if ((this.newAlipay !== "" && testEmail(this.newAlipay) || this.newUsername !== "") || this.newTwitter !== "" || this.newPhomepage !== "" || this.newAbstract !== "") {
+                        return false;
+                    }
+                    return true;
+                },
+                update2: function() {
+                    if (this.oldPassword !== "" && this.newPassword !== "" && this.repNewPassword !== "" && this.newPassword === this.repNewPassword) {
+                        return false;
+                    }
+                    return true;
+                }
+            },
+            methods: {
+                follow: function() {
+                    this.$http.get(`/homepage/addfollowing?userID=${this.userID}`).then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                $('#warning').modal({});
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                },
+                gotohomepage: function() {
+                    location.href = `/homepage?userID=${this.userID}`;
+                },
+                quit: function() {
+                    this.$http.get('/homepage/quit').then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                setTimeout(function() {
+                                    location.href = '/login';
+                                }, 2000);
+                                $('#warning').modal({});
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                },
+                updateUser: function() {
+                    let data = {};
+                    if (this.newUsername !== "") {
+                        data.newname = this.newUsername;
+                    } else {
+                        data.newname = this.oldUsername;
+                    }
+                    if (this.newAlipay !== "" && testEmail(this.newAlipay)) {
+                        data.newAlipay = this.newAlipay;
+                    } else {
+                        data.newAlipay = this.oldAlipay;
+                    }
+                    if (this.newTwitter !== "") {
+                        data.twitter = this.newTwitter;
+                    } else {
+                        data.twitter = this.oldTwitter;
+                    }
+                    if (this.newPhomepage !== "") {
+                        data.phomepage = this.newPhomepage;
+                    } else {
+                        data.phomepage = this.oldPhomepage;
+                    }
+                    if (this.newAbstract !== "") {
+                        data.abstract = this.newAbstract;
+                    } else {
+                        data.abstract = this.oldAbstract;
+                    }
+                    this.$http.post('/homepage/configUpload', data).then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                $('#warning').modal({});
+                                setTimeout(function() {
+                                    location = location;
+                                }, 2000);
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while following ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                },
+                getFiles: function(event) {
+                    var files = event.target.files;
+                    // console.log(files[0]);
+                    if (!files.length) {
+                        this.newFilename = "Please select file";
+                        this.isImage = true;
+                        return;
+                    }
+                    this.newFilename = files[0].name;
+                    var imgReg = /^(.)+\.((png))$/;
+                    if (imgReg.test(files[0].name)) {
+                        var image = new Image();
+                        var reader = new FileReader();
+                        reader.onload = (e) => {
+                            app.newImagePath = e.target.result;
+                        };
+                        reader.readAsDataURL(files[0]);
+                        this.newImage = files[0];
+                        this.isImage = false;
+                    } else {
+                        this.isImage = true;
+                    }
+                },
+                updateHeader: function() {
+                    var fileFormData = new FormData();
+                    fileFormData.append("user_header", this.newImage);
+                    this.$http.post('/upload/header', fileFormData).then(function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                $('#warning').modal({});
+                                setTimeout(function() {
+                                    location = location;
+                                }, 2000);
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while uploading ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                },
+                updatePwd: function() {
+                    let data = {};
+                    data.oldPassword = this.oldPassword;
+                    data.newPassword = this.newPassword;
+                    this.$http.post('/homepage/passwordUpload', data).then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                $('#warning').modal({});
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while updateing ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                },
+                charge: function() {
+                    let data = {};
+                    data.money = this.newMoney;
+                    this.$http.post('/homepage/charge', data).then(
+                        function(response) {
+                            if (response.data.status == 1) {
+                                app.status = "Success!";
+                                app.message = response.data.msg;
+                                app.totalMoney = Number(app.totalMoney) + app.newMoney;
+                                $('#warning').modal({});
+                            } else if (response.data.status == 0) {
+                                app.status = "Error!";
+                                app.message = `Something wrong while updateing ERR:${response.data.msg}`;
+                                $('#warning').modal({});
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
+                }
+            }
+        });
+
+        function isNumber(obj) {
+            return obj === +obj
+        }
+
+        function testEmail(str) {
+            var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+            if (reg.test(str)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+</body>
+
+</html>
