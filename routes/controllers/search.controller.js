@@ -6,7 +6,7 @@ var sql = require('../../dbconf/sqlMapping.js');
 
 router.get('/', search);
 router.get('/user', searchUserGet);
-router.post('/user', searchUserPost);
+router.patch('/user', searchUserPost);
 router.get('/painting',searchPaintingGet);
 router.post('/painting',searchPaintingPost);
 router.get('/trade',searchTradeGet);
@@ -232,7 +232,7 @@ function searchPaintingPost(req,res,next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '';
+                        message = err.code + ' ' + err.sqlMessage;
                         res.json({
                             status: status,
                             msg: message
@@ -348,7 +348,7 @@ function searchTradePost(req,res,next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '';
+                        message = err.code + ' ' + err.sqlMessage;
                         res.json({
                             status: status,
                             msg: message

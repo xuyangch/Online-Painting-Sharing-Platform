@@ -98,7 +98,7 @@ return页面register.ejs
 
 	not checked! 两个钱 和个人信息
 
-/configUpload@post
+/configUpload@patch
 	Param newname(新的用户名), newAlipay, 以后还要加用户的详细信息
 	Return 状态：status： 1：成功/0：失败
 			错误信息：msg
@@ -132,7 +132,7 @@ return页面register.ejs
 		false： 不是自己
 
 
-/addfollowing@get?userID 注：这边的userID是被关注的人的ID
+/addfollowing@patch?userID 注：这边的userID是被关注的人的ID
 	Param userID
 	Return 状态：status： 1：成功/0：失败
 			错误信息：msg
@@ -140,7 +140,7 @@ return页面register.ejs
 
 ---checked 5.21
 
-/delfollowing@get?userID
+/delfollowing@patch?userID
 	Param userID
 	Return 状态：status： 1：成功/0：失败
 			错误信息：msg
@@ -206,14 +206,14 @@ return页面register.ejs
 		用户ID：userID
 
 
-/delcontribute@get?paintingID
+/delcontribute@patch?paintingID
 	Param paintingID
 	Return 状态：status： 1：成功/0：失败
 			错误信息：msg
 		用于为登陆用户删除投稿的画，注意权限判断
 
 
-/charge@post?
+/charge@patch?
 	Param money
 	Return 1:成功 0:失败
 	not checked! 等待数据库实现

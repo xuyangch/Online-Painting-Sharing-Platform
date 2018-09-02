@@ -5,9 +5,9 @@ var pool = require('../../dbconf/pool.js');
 var sql = require('../../dbconf/sqlMapping.js');
 
 router.get('/', comm);
-router.post('/addTag', addTag);
-router.post('/delTag', delTag);
-router.post('/upvote', upvote);
+router.patch('/addTag', addTag);
+router.patch('/delTag', delTag);
+router.patch('/upvote', upvote);
 
 function comm(req, res, next) {
     var illustID = Number(req.query.paintingID);

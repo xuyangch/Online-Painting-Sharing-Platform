@@ -9,18 +9,18 @@ var fs = require('fs');
 var upload = multer({ dest: 'uploads/' });
 router.get('/', data);
 router.get('/config', config);
-router.post('/configUpload', configUpload);
-router.post('/passwordUpload', passwordUpload);
-router.post('/charge', charge);
+router.patch('/configUpload', configUpload);
+router.patch('/passwordUpload', passwordUpload);
+router.patch('/charge', charge);
 router.get('/following', following);
-router.get('/addfollowing', addFollowing);
-router.get('/delfollowing', delFollowing);
+router.patch('/addfollowing', addFollowing);
+router.patch('/delfollowing', delFollowing);
 router.get('/collect', collect);
-router.get('/addcollect', addCollecting);
-router.get('/delcollect', delCollecting);
+router.patch('/addcollect', addCollecting);
+router.patch('/delcollect', delCollecting);
 router.get('/contribute', contribute);
 router.get('/addcontribute', addContribute);
-router.get('/delcontribute', delContribute);
+router.patch('/delcontribute', delContribute);
 router.get('/quit', quit);
 
 function data(req, res, next) {
@@ -301,12 +301,12 @@ function following(req, res, next) {
     }
 }
 
-function addFollowing(req, res, next) {
+function addFollowing(req, res, next) {    
     var userID = req.session.userID;
-    var followingID = req.query.userID;
+    var followingID = req.body.userID;    
     var status = 0;
-    var message = '';
-    if (userID)
+    var message = '';    
+    if (userID)    
     {
         pool.getConnection(function(err, connection) {
             if (err) {
@@ -319,27 +319,37 @@ function addFollowing(req, res, next) {
                 });
                 return;
             }
-            connection.query(
-                sql.addFollowing,
-                [userID, followingID],
-                function (err, result) {
-                    connection.release();
-                    if (err) {
-                        //handle error
-                        status = 0;
-                        message = '添加关注人失败';
-                    }
-                    if (result) {
-                        //res.render('following', {})
-                        status = 1;
-                        message = '添加关注人成功';
-                    }
-                    res.json({
-                        status : status,
-                        msg: message
-                    });
-                    return;
+            if (userID == followingID) {
+                status = 0;
+                message = 'You cannot follow yourself.';
+                res.json({
+                    status : status,
+                    msg: message
                 });
+                return;
+            } else {
+                connection.query(
+                    sql.addFollowing,
+                    [userID, followingID],
+                    function (err, result) {
+                        connection.release();
+                        if (err) {
+                            //handle error
+                            status = 0;
+                            message = '添加关注人失败';
+                        }
+                        if (result) {
+                            //res.render('following', {})
+                            status = 1;
+                            message = '添加关注人成功';
+                        }
+                        res.json({
+                            status : status,
+                            msg: message
+                        });
+                        return;
+                    });
+            }
         });
     }
     else{
@@ -350,7 +360,9 @@ function addFollowing(req, res, next) {
 
 function delFollowing(req, res, next) {
     var userID = req.session.userID;
-    var followingID = req.query.userID;
+    var followingID = req.body.userID;
+    console.log(userID)
+    console.log(followingID)
     var status;
     var message;
     if (userID)
@@ -440,7 +452,8 @@ function collect(req, res, next) {
 
 function addCollecting(req, res, next) {
     var userID = req.session.userID;
-    var paintingID = req.query.paintingID;
+    var paintingID = req.body.paintingID;
+    console.log(paintingID)
     var status = 0;
     var message = '';
     if (userID)
@@ -487,7 +500,7 @@ function addCollecting(req, res, next) {
 
 function delCollecting(req, res, next) {
     var userID = req.session.userID;
-    var paintingID = req.query.paintingID;
+    var paintingID = req.body.paintingID;
     var status = 0;
     var message = '';
     if (userID)
@@ -615,7 +628,7 @@ function addContribute(req, res, next) {
 
 function delContribute(req, res, next) {
     var userID = req.session.userID;
-    var paintingID = Number(req.query.paintingID);
+    var paintingID = Number(req.body.paintingID);
     var status = 0;
     var message = '';
     if (userID)

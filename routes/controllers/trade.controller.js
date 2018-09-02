@@ -10,13 +10,13 @@ var upload = multer({ dest: 'public/img/' });
 // 感觉画家接单也可以直接放在这个页面
 router.get('/', trade);
 // 招标的发起页
-router.post('/initTrade',initialTradePost);
+router.patch('/initTrade',initialTradePost);
 router.get('/initTrade',initialTradeGet);
 router.get('/getTrade',getTrade);
-router.get('/getTrade/selectpainter',selectPainter);
-router.get('/getTrade/applyfortrade',applyForTrade);
-router.get('/cancelTrade',cancelTrade);
-router.get('/completeTrade',completeTrade);
+router.patch('/getTrade/selectpainter',selectPainter);
+router.patch('/getTrade/applyfortrade',applyForTrade);
+router.patch('/cancelTrade',cancelTrade);
+router.patch('/completeTrade',completeTrade);
 router.get('/tradehomepage', tradeHomepage);
 router.get('/getTrade/uploadwork', uploadwork);
 
@@ -132,7 +132,7 @@ function initialTradePost(req, res, next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '加入Trade失败';
+                        message = '加入Trade失败' + err.code + ' ' + err.sqlMessage;
                         res.json({status:status, msg:message});
                         connection.release();
                         return;
@@ -153,7 +153,7 @@ function initialTradePost(req, res, next) {
                                 if (err) {
                                     //handle error
                                     status = 0;
-                                    message = '加入Tags给Trade失败';
+                                    message = '加入Trade成功，但是加入Tags给Trade失败';
                                     res.json({status:status, msg:message});
                                     return;
                                 }
@@ -267,8 +267,8 @@ function selectPainter(req, res, next) {
     var userID = req.session.userID;
     var status = 1;
     var message = '';
-    var tradeID = req.query.tradeID;
-    var painterID = Number(req.query.painterID);
+    var tradeID = req.body.tradeID;
+    var painterID = Number(req.body.painterID);
     if (userID) {
         pool.getConnection(function (err, connection) {
             if (err) {
@@ -289,7 +289,7 @@ function selectPainter(req, res, next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '选择画家失败';
+                        message = '选择画家失败' + err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         status = 1;
@@ -314,7 +314,9 @@ function applyForTrade(req, res, next) {
     var userID = req.session.userID;
     var status = 1;
     var message = '';
-    var tradeID = Number(req.query.tradeID);
+    var tradeID = Number(req.body.tradeID);
+    console.log(userID);
+    console.log(tradeID);
     if (userID) {
         pool.getConnection(function (err, connection) {
             if (err) {
@@ -333,9 +335,9 @@ function applyForTrade(req, res, next) {
                 , function (err, result) {
                     connection.release();
                     if (err) {
-                        // handle error
+                        // handle error                        
                         status = 0;
-                        message = '应聘交易失败';
+                        message = '应聘交易失败' + err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         status = 1;
@@ -405,7 +407,7 @@ function cancelTrade(req, res, next) {
     var userID = req.session.userID;
     var status = 1;
     var message = '';
-    var tradeID = req.query.tradeID;
+    var tradeID = req.body.tradeID;
     if (userID) {
         pool.getConnection(function (err, connection) {
             if (err) {
@@ -426,7 +428,7 @@ function cancelTrade(req, res, next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '取消交易失败';
+                        message = '取消交易失败' + err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         status = 1;
@@ -451,7 +453,7 @@ function completeTrade(req, res, next) {
     var userID = req.session.userID;
     var status = 1;
     var message = '';
-    var tradeID = req.query.tradeID;
+    var tradeID = req.body.tradeID;
 
     if (userID) {
         pool.getConnection(function (err, connection) {
@@ -473,7 +475,7 @@ function completeTrade(req, res, next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '完成交易失败';
+                        message = '完成交易失败' + err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         status = 1;

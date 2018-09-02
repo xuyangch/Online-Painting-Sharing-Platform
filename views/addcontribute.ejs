@@ -38,18 +38,19 @@
                     </button>
                     <a class="navbar-brand" href="/homepage">Vixip</a>
                 </div>
-                <div class="navbar-collapse collapse">
-                    <form class="navbar-form navbar-left" action="#" role="search">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <input class="form-control" id="navbarInput-01" type="search" placeholder="Search Painting">
-                                <span class="input-group-btn">
-                      <a type="button" class="btn" href="/search/painting"><span class="fui-search"></span></a>
-                                </span>
-                            </div>
-                        </div>
-                    </form>
+                <div class="navbar-collapse collapse">                    
                     <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search <b class="caret"></b></a>
+                            <span class="dropdown-arrow"></span>
+                            <ul class="dropdown-menu">
+                                <li><a href="/search/painting">Painting</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/search/trade">Trade</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/search/user">User</a></li>                                                                    
+                            </ul>
+                        </li>
                         <li><a href="/homepage">Home page</a></li>
                         <li><a href="/homepage/addcontribute">New Contribution</a></li>
                         <!--<li><a href="/homepage/collect">Collection</a></li>-->
@@ -73,8 +74,7 @@
                                 <h4 @click="gotohomepage">
                                     <%=username %>
                                 </h4>
-                                <br/>
-                                <button class="btn btn-primary btn-hg" @click="follow">Follow</button>
+                                <br/>                                
                             </div>
                         </div>
                         <!--the others are the same-->
@@ -182,25 +182,7 @@
                     return true;
                 }
             },
-            methods: {
-                follow: function() {
-                    this.$http.get(`/homepage/addfollowing?userID=${this.userID}`).then(
-                        function(response) {
-                            if (response.data.status == 1) {
-                                app.status = "Success!";
-                                app.message = response.data.msg;
-                                $('#warning').modal({});
-                            } else if (response.data.status == 0) {
-                                app.status = "Error!";
-                                app.message = `Something wrong while following ERR:${response.data.msg}`;
-                                $('#warning').modal({});
-                            }
-                        },
-                        function(err) {
-                            console.log(err);
-                        }
-                    )
-                },
+            methods: {                
                 gotohomepage: function() {
                     location.href = `/homepage?userID=${this.userID}`;
                 },

@@ -38,25 +38,26 @@
                     </button>
                     <a class="navbar-brand" href="/homepage">Vixip</a>
                 </div>
-                <div class="navbar-collapse collapse">
-                    <form class="navbar-form navbar-left" action="#" role="search">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <input class="form-control" id="navbarInput-01" type="search" placeholder="Search User">
-                                <span class="input-group-btn">
-                      <a type="button" class="btn" href="/search/user"><span class="fui-search"></span></a>
-                                </span>
-                            </div>
-                        </div>
-                    </form>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/homepage">Home page</a></li>
-                        <li><a href="/homepage/addcontribute">New Contribution</a></li>
-                        <!--<li><a href="/homepage/collect">Collection</a></li>-->
-                        <li><a href="/trade/tradehomepage">Trade Home</a></li>
-                        <li><a href="/homepage/config"><span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span><span class="visible-md visible-lg"><span class="fui-gear"></span></span></a></li>
-                        <li><a @click="quit"><span class="fui-exit"></span></a></li>
-                    </ul>
+                <div class="navbar-collapse collapse">                    
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search <b class="caret"></b></a>
+                                <span class="dropdown-arrow"></span>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/search/painting">Painting</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="/search/trade">Trade</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="/search/user">User</a></li>                                                                    
+                                </ul>
+                            </li>
+                            <li><a href="/homepage">Home page</a></li>
+                            <li><a href="/homepage/addcontribute">New Contribution</a></li>
+                            <!--<li><a href="/homepage/collect">Collection</a></li>-->
+                            <li><a href="/trade/tradehomepage">Trade Home</a></li>
+                            <li><a href="/homepage/config"><span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span><span class="visible-md visible-lg"><span class="fui-gear"></span></span></a></li>
+                            <li><a @click="quit"><span class="fui-exit"></span></a></li>
+                        </ul>
                 </div>
             </div>
         </div>
@@ -74,8 +75,7 @@
                                 <h4 @click="gotohomepage">
                                     <%=username %>
                                 </h4>
-                                <br/>
-                                <button class="btn btn-primary btn-hg" @click="follow">Follow</button>
+                                <br/>                                
 
                             </div>
                         </div>
@@ -165,25 +165,7 @@
                 status: "",
                 message: ""
             },
-            methods: {
-                follow: function() {
-                    this.$http.get(`/homepage/addfollowing?userID=${this.userID}`).then(
-                        function(response) {
-                            if (response.data.status == 1) {
-                                app.status = "Success!";
-                                app.message = response.data.msg;
-                                $('#warning').modal({});
-                            } else if (response.data.status == 0) {
-                                app.status = "Error!";
-                                app.message = `Something wrong while following ERR:${response.data.msg}`;
-                                $('#warning').modal({});
-                            }
-                        },
-                        function(err) {
-                            console.log(err);
-                        }
-                    )
-                },
+            methods: {                
                 gotohomepage: function() {
                     location.href = `/homepage?userID=${this.userID}`;
                 },
@@ -209,7 +191,9 @@
                     )
                 },
                 delFollow: function(userID) {
-                    this.$http.get(`/homepage/delfollowing?userID=${userID}`).then(
+                    var data = {};
+                    data.userID = userID;
+                    this.$http.patch(`/homepage/delfollowing`, data).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";

@@ -38,24 +38,26 @@
                     </button>
                     <a class="navbar-brand" href="/homepage">Vixip</a>
                 </div>
-                <div class="navbar-collapse collapse">
-                    <form class="navbar-form navbar-left" action="#" role="search">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <input class="form-control" id="navbarInput-01" type="search" placeholder="Search Trade">
-                                <span class="input-group-btn">
-                      <a type="button" class="btn" href="/search/trade"><span class="fui-search"></span></a>
-                                </span>
-                            </div>
-                        </div>
-                    </form>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/trade/tradehomepage">Trade Home</a></li>
-                        <li><a href="/trade/initTrade">Init Trade</a></li>
-                        <li><a href="/trade">All Trade</a></li>
-                        <li><a href="/homepage/config"><span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span><span class="visible-md visible-lg"><span class="fui-gear"></span></span></a></li>
-                        <li><a @click="quit"><span class="fui-exit"></span></a></li>
-                    </ul>
+                <div class="navbar-collapse collapse">                    
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search <b class="caret"></b></a>
+                                <span class="dropdown-arrow"></span>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/search/painting">Painting</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="/search/trade">Trade</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="/search/user">User</a></li>                                                                    
+                                </ul>
+                            </li>
+                            <li><a href="/homepage">Home page</a></li>
+                            <li><a href="/homepage/addcontribute">New Contribution</a></li>
+                            <!--<li><a href="/homepage/collect">Collection</a></li>-->
+                            <li><a href="/trade/tradehomepage">Trade Home</a></li>
+                            <li><a href="/homepage/config"><span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span><span class="visible-md visible-lg"><span class="fui-gear"></span></span></a></li>
+                            <li><a @click="quit"><span class="fui-exit"></span></a></li>
+                        </ul>
                 </div>
             </div>
         </div>
@@ -256,7 +258,9 @@
                     )
                 },
                 apply: function() {
-                    this.$http.get(`/trade/getTrade/applyfortrade?tradeID=${this.tradeID}`).then(function(response) {
+                    var data = {};
+                    data.tradeID = this.tradeID;
+                    this.$http.patch(`/trade/getTrade/applyfortrade`, data).then(function(response) {
                         if (response.data.status == 1) {
                             app.status = "Success!";
                             app.message = response.data.msg;
@@ -271,7 +275,10 @@
                     })
                 },
                 confirm: function() {
-                    this.$http.get(`/trade/getTrade/selectpainter?tradeID=${this.tradeID}&painterID=${this.selectedID}`).then(function(response) {
+                    var data = {};
+                    data.tradeID = this.tradeID;
+                    data.selectedID = this.selectedID;
+                    this.$http.patch(`/trade/getTrade/selectpainter`,data).then(function(response) {
                         if (response.data.status == 1) {
                             app.status = "Success!";
                             app.message = response.data.msg;
@@ -286,7 +293,9 @@
                     })
                 },
                 cancelTrade: function() {
-                    this.$http.get(`/trade/cancelTrade?tradeID=${this.tradeID}`).then(
+                    var data = {};
+                    data.tradeID = this.tradeID;
+                    this.$http.patch(`/trade/cancelTrade`, data).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";
@@ -304,7 +313,9 @@
                     )
                 },
                 completeTrade: function() {
-                    this.$http.get(`/trade/completeTrade?tradeID=${this.tradeID}`).then(
+                    var data = {};
+                    data.tradeID = this.tradeID;
+                    this.$http.patch(`/trade/completeTrade`,data).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";
