@@ -59,9 +59,9 @@ test*
 
 *.png
 # db connection
-app.js
+# app.js
 
-pool.js
+# pool.js
 
 public/img/painting/placeholder
 
