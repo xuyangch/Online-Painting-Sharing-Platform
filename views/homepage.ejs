@@ -242,7 +242,7 @@
                 follow: function() {
                     var data = {};
                     data.userID = this.userID;
-                    this.$http.patch('/homepage/addfollowing', data).then(
+                    this.$http.patch('/homepage/following', data).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";

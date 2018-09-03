@@ -190,10 +190,8 @@
                         }
                     )
                 },
-                delContribute: function(paintingID) {
-                    var data = {};
-                    data.paintingID = paintingID;
-                    this.$http.patch(`/homepage/delcontribute`, data).then(
+                delContribute: function(paintingID) {                    
+                    this.$http.delete(`/homepage/contribute?paintingID=${paintingID}`).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";

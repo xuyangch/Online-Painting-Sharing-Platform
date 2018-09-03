@@ -9,18 +9,18 @@ var fs = require('fs');
 var upload = multer({ dest: 'uploads/' });
 router.get('/', data);
 router.get('/config', config);
-router.patch('/configUpload', configUpload);
-router.patch('/passwordUpload', passwordUpload);
+router.patch('/config', configUpload);
+router.patch('/password', passwordUpload);
 router.patch('/charge', charge);
 router.get('/following', following);
-router.patch('/addfollowing', addFollowing);
-router.patch('/delfollowing', delFollowing);
+router.patch('/following', addFollowing);
+router.delete('/following', delFollowing);
 router.get('/collect', collect);
-router.patch('/addcollect', addCollecting);
-router.patch('/delcollect', delCollecting);
+router.patch('/collect', addCollecting);
+router.delete('/collect', delCollecting);
 router.get('/contribute', contribute);
 router.get('/addcontribute', addContribute);
-router.patch('/delcontribute', delContribute);
+router.delete('/contribute', delContribute);
 router.get('/quit', quit);
 
 function data(req, res, next) {
@@ -358,9 +358,9 @@ function addFollowing(req, res, next) {
     }
 }
 
-function delFollowing(req, res, next) {
-    var userID = req.session.userID;
-    var followingID = req.body.userID;
+function delFollowing(req, res, next) {    
+    var userID = req.session.userID;    
+    var followingID = req.query.userID;    
     console.log(userID)
     console.log(followingID)
     var status;
@@ -500,7 +500,7 @@ function addCollecting(req, res, next) {
 
 function delCollecting(req, res, next) {
     var userID = req.session.userID;
-    var paintingID = req.body.paintingID;
+    var paintingID = req.query.paintingID;
     var status = 0;
     var message = '';
     if (userID)
@@ -628,7 +628,7 @@ function addContribute(req, res, next) {
 
 function delContribute(req, res, next) {
     var userID = req.session.userID;
-    var paintingID = Number(req.body.paintingID);
+    var paintingID = Number(req.query.paintingID);
     var status = 0;
     var message = '';
     if (userID)

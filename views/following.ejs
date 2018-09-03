@@ -190,10 +190,8 @@
                         }
                     )
                 },
-                delFollow: function(userID) {
-                    var data = {};
-                    data.userID = userID;
-                    this.$http.patch(`/homepage/delfollowing`, data).then(
+                delFollow: function(userID) {                                   
+                    this.$http.delete(`/homepage/following?userID=${userID}`).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";

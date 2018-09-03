@@ -175,7 +175,7 @@
                                             </div>
                                             <div class="col-lg-2 upfilebox">
                                                 <input type="file" id="InputFile" @change="getFiles">
-                                                <button class="btn btn-primary btn-block">Browse</button>
+                                                <button class="btn btn-primary">Browse</button>
                                             </div>
                                         </div>
 
@@ -371,7 +371,7 @@
                     } else {
                         data.abstract = this.oldAbstract;
                     }
-                    this.$http.patch('/homepage/configUpload', data).then(
+                    this.$http.patch('/homepage/config', data).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";
@@ -440,7 +440,7 @@
                     let data = {};
                     data.oldPassword = this.oldPassword;
                     data.newPassword = this.newPassword;
-                    this.$http.patch('/homepage/passwordUpload', data).then(
+                    this.$http.patch('/homepage/password', data).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";

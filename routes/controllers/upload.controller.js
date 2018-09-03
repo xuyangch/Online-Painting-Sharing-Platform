@@ -144,7 +144,7 @@ function paintingUpload(req, res, next) {
     }
 }
 
-function tradeworkUpload(req, res, next) {
+function tradeworkUpload(req, res, next) {    
     var userID = req.session.userID;
     var tradeID = req.body.tradeID;
     if (userID)
@@ -185,7 +185,7 @@ function tradeworkUpload(req, res, next) {
                             if (err)
                             {
                                 state = 0;
-                                message = '用户添加交易画重命名失败';
+                                message = '用户添加交易画重命名失败' + err;
                             }
                             else {
                                 state = 1;

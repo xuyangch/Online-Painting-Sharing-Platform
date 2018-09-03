@@ -55,6 +55,8 @@
                             <li><a href="/homepage/addcontribute">New Contribution</a></li>
                             <!--<li><a href="/homepage/collect">Collection</a></li>-->
                             <li><a href="/trade/tradehomepage">Trade Home</a></li>
+                            <li><a href="/trade/newTrade">Init Trade</a></li>
+                            <li><a href="/trade">All Trade</a></li>                        
                             <li><a href="/homepage/config"><span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span><span class="visible-md visible-lg"><span class="fui-gear"></span></span></a></li>
                             <li><a @click="quit"><span class="fui-exit"></span></a></li>
                         </ul>
@@ -123,7 +125,7 @@
                                                     </p>
                                                 </div>
                                             </div>
-                                            <a class="btn btn-primary btn-large btn-block " href="<%='/trade/getTrade?tradeID=' + trade[i].tradeID %>">More</a>
+                                            <a class="btn btn-primary btn-large btn-block " href="<%='/trade/oldTrade?tradeID=' + trade[i].tradeID %>">More</a>
                                         </div>
                                     </div>
                                     <% } %>

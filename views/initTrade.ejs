@@ -216,7 +216,7 @@
                     data.price = this.price;
                     data.tag = this.tags;
                     data.deadline = this.ddl;
-                    this.$http.patch('/trade/initTrade', data).then(
+                    this.$http.patch('/trade/newTrade', data).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";

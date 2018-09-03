@@ -10,15 +10,15 @@ var upload = multer({ dest: 'public/img/' });
 // 感觉画家接单也可以直接放在这个页面
 router.get('/', trade);
 // 招标的发起页
-router.patch('/initTrade',initialTradePost);
-router.get('/initTrade',initialTradeGet);
-router.get('/getTrade',getTrade);
-router.patch('/getTrade/selectpainter',selectPainter);
-router.patch('/getTrade/applyfortrade',applyForTrade);
-router.patch('/cancelTrade',cancelTrade);
-router.patch('/completeTrade',completeTrade);
+router.patch('/newTrade',initialTradePatch);
+router.get('/newTrade',initialTradeGet);
+router.get('/oldTrade',getTrade);
+router.patch('/oldTrade/selection',selectPainter);
+router.patch('/oldTrade/application',applyForTrade);
+router.delete('/oldTrade',cancelTrade);
+router.patch('/complete',completeTrade);
 router.get('/tradehomepage', tradeHomepage);
-router.get('/getTrade/uploadwork', uploadwork);
+router.get('/oldTrade/uploadwork', uploadwork);
 
 
 
@@ -106,7 +106,7 @@ function initialTradeGet(req, res, next) {
     }
 }
 
-function initialTradePost(req, res, next) {
+function initialTradePatch(req, res, next) {
     var userID = req.session.userID;
     var body = req.body;
     var status = 1;
@@ -268,7 +268,7 @@ function selectPainter(req, res, next) {
     var status = 1;
     var message = '';
     var tradeID = req.body.tradeID;
-    var painterID = Number(req.body.painterID);
+    var painterID = Number(req.body.selectedID);
     if (userID) {
         pool.getConnection(function (err, connection) {
             if (err) {
@@ -407,7 +407,7 @@ function cancelTrade(req, res, next) {
     var userID = req.session.userID;
     var status = 1;
     var message = '';
-    var tradeID = req.body.tradeID;
+    var tradeID = req.query.tradeID;
     if (userID) {
         pool.getConnection(function (err, connection) {
             if (err) {

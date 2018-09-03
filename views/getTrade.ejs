@@ -176,7 +176,7 @@
                                     <% if(isResponded || isBuyer || isApplied) { %>
                                         <div class="panel-footer">
                                             <% if(isResponded && trade.status == "Creating") { %>
-                                                <a class="btn btn-primary btn-large btn-block " href="<%='/trade/getTrade/uploadWork?tradeID='+trade.id %>">Upload Work</a>
+                                                <a class="btn btn-primary btn-large btn-block " href="<%='/trade/oldTrade/uploadWork?tradeID='+trade.id %>">Upload Work</a>
                                                 <% } %>
                                                     <% if(isBuyer && trade.status == "Complete") { %>
                                                         <button type="button" class="btn btn-primary btn-large btn-block " @click="completeTrade">Confirm</button>
@@ -260,7 +260,7 @@
                 apply: function() {
                     var data = {};
                     data.tradeID = this.tradeID;
-                    this.$http.patch(`/trade/getTrade/applyfortrade`, data).then(function(response) {
+                    this.$http.patch(`/trade/oldTrade/application`, data).then(function(response) {
                         if (response.data.status == 1) {
                             app.status = "Success!";
                             app.message = response.data.msg;
@@ -278,7 +278,7 @@
                     var data = {};
                     data.tradeID = this.tradeID;
                     data.selectedID = this.selectedID;
-                    this.$http.patch(`/trade/getTrade/selectpainter`,data).then(function(response) {
+                    this.$http.patch(`/trade/oldTrade/selection`,data).then(function(response) {
                         if (response.data.status == 1) {
                             app.status = "Success!";
                             app.message = response.data.msg;
@@ -292,10 +292,8 @@
                         console.log(err);
                     })
                 },
-                cancelTrade: function() {
-                    var data = {};
-                    data.tradeID = this.tradeID;
-                    this.$http.patch(`/trade/cancelTrade`, data).then(
+                cancelTrade: function() {                    
+                    this.$http.delete(`/trade/oldTrade?tradeID=${this.tradeID}`).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";
@@ -315,7 +313,7 @@
                 completeTrade: function() {
                     var data = {};
                     data.tradeID = this.tradeID;
-                    this.$http.patch(`/trade/completeTrade`,data).then(
+                    this.$http.patch(`/trade/complete`,data).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";

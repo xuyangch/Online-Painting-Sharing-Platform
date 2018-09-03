@@ -239,7 +239,7 @@
                 bookmark: function() {
                     var data = {};
                     data.paintingID = this.paintingID;
-                    this.$http.patch(`/homepage/addcollect`, data).then(
+                    this.$http.patch(`/homepage/collect`, data).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";
@@ -260,7 +260,7 @@
                     var data = {};
                     data.paintingID = this.paintingID;
                     data.tag = tag;
-                    this.$http.patch('/illust/delTag', data).then(
+                    this.$http.delete(`/illust/Tag?paintingID=${this.paintingID}&tag=${tag}`).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";
@@ -288,7 +288,7 @@
                     var data = {};
                     data.paintingID = this.paintingID;
                     data.tag = this.newTag;
-                    this.$http.patch('/illust/addTag', data).then(
+                    this.$http.patch('/illust/Tag', data).then(
                         function(response) {
                             if (response.data.status == 1) {
                                 app.status = "Success!";

@@ -5,8 +5,8 @@ var pool = require('../../dbconf/pool.js');
 var sql = require('../../dbconf/sqlMapping.js');
 
 router.get('/', comm);
-router.patch('/addTag', addTag);
-router.patch('/delTag', delTag);
+router.patch('/Tag', addTag);
+router.delete('/Tag', delTag);
 router.patch('/upvote', upvote);
 
 function comm(req, res, next) {
@@ -66,8 +66,9 @@ function comm(req, res, next) {
 
 function delTag(req, res, next) {
     var userID = req.session.userID;
-    var tag = req.body.tag;
-    var paintingID = Number(req.body.paintingID);
+    var tag = req.query.tag;
+    console.log(tag);
+    var paintingID = Number(req.query.paintingID);
     var status = 0;
     var message = '';
     if (userID && paintingID)
