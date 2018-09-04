@@ -263,7 +263,7 @@
                     location.href = `/homepage?userID=${this.userID}`;
                 },
                 hrefFollow: function() {
-                    location.href = '/homepage/following';
+                    location.href = `/homepage/following?userID=${this.userID}`;
                 },
                 quit: function() {
                     this.$http.get('/homepage/quit').then(

@@ -59,9 +59,12 @@ test*
 
 *.png
 # db connection
-# app.js
+app.js
 
-# pool.js
+pool.js
+
+# package control
+package.json
 
 public/img/painting/placeholder
 
@@ -69,3 +72,10 @@ public/img/header/placeholder
 
 # vscode
 .vscode
+
+#nohup
+.lock
+
+nohup.out
+
+/tmp
