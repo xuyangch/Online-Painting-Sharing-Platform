@@ -66,7 +66,7 @@ function searchUserPost(req,res,next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -82,7 +82,7 @@ function searchUserPost(req,res,next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '未找到用户';
+                        message = err.code + ' ' + err.sqlMessage;
                         res.json({
                             status: status,
                             msg: message,
@@ -218,7 +218,7 @@ function searchPaintingPost(req,res,next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -241,7 +241,7 @@ function searchPaintingPost(req,res,next) {
                     }
                     if (result) {
                         status = 1;
-                        message = '查找画成功';
+                        message = 'Successfully found a painting';
                         res.json({
                             status: status,
                             msg: message,
@@ -334,7 +334,7 @@ function searchTradePost(req,res,next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -357,7 +357,7 @@ function searchTradePost(req,res,next) {
                     }
                     if (result) {
                         status = 1;
-                        message = '查找交易成功';
+                        message = 'Successfully found a trade';
                         res.json({
                             status: status,
                             msg: message,

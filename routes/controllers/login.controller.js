@@ -20,7 +20,7 @@ function userlogin(req, res, next) {
         if (err) {
             // handle error
             status = 0;
-            message = '连接数据库失败';
+            message = 'Failed to connect to database';
             res.json({
                 status : status,
                 msg: message
@@ -34,13 +34,13 @@ function userlogin(req, res, next) {
                 if (err) {
                     // handle error
                     status = 0;
-                    message = '用户登录失败';
+                    message = err.code + ' ' + err.sqlMessage;
                 }
                 if (result) {
                     if (result[0].userID < 0)
                     {
                         status = 0;
-                        message = '用户登录失败';
+                        message = 'Failed to login';
                     }
                     else {
                         req.session.userID = result[0].userID;

@@ -29,11 +29,11 @@ function headerUpload(req, res, next) {
         fs.rename(__dirname + '/../../public/img/' + req.file.filename,__dirname + '/../../public/img/header/'+userID.toString()+'.png',function(err){
             if(err){
                 status = 0;
-                message = '上传头像失败';
+                message = 'Failed to upload profile image';
             }
             else {
                 status = 1;
-                message = '上传头像成功';
+                message = 'Successfully uploaded profile image';
             }
             res.json({
                status: status,
@@ -61,7 +61,7 @@ function paintingUpload(req, res, next) {
                 fs.unlink(__dirname + '/../../public/img/' + req.file.filename);
                 res.json({
                     status : 0,
-                    msg: '连接数据库失败'
+                    msg: 'Failed to connect to database'
                 });
                 return;
             }
@@ -76,7 +76,7 @@ function paintingUpload(req, res, next) {
                     if (err) {
                         //handle error
                         state = 0;
-                        message = '用户添加画失败';
+                        message = err.code + ' ' + err.sqlMessage;
                         //delete file
                         fs.unlink(__dirname + '/../../public/img/' + req.file.filename);
                         res.json({
@@ -99,7 +99,7 @@ function paintingUpload(req, res, next) {
                             fs.rename(__dirname + '/../../public/img/' + req.file.filename, __dirname + '/../../public/img/painting/' + paintingID.toString() + path.extname(req.file.originalname), function (err) {
                                 if (err) {
                                     state = 0;
-                                    message = '用户添加画失败';
+                                    message = 'Failed to rename the painting';
                                     res.json({
                                         status: state,
                                         msg: message
@@ -117,11 +117,11 @@ function paintingUpload(req, res, next) {
                                             state = 1;
                                             if (err)
                                             {
-                                                message = '画分辨率未知';
+                                                message = 'Unknown resolution';
                                             }
                                             if (result)
                                             {
-                                                message = '用户添加画成功';
+                                                message = 'Successfully uploaded a painting';
                                                 res.json({
                                                     status: state,
                                                     msg: message
@@ -156,7 +156,7 @@ function tradeworkUpload(req, res, next) {
                 fs.unlink(__dirname + '/../../public/img/' + req.file.filename);
                 res.json({
                     status : 0,
-                    msg: '连接数据库失败'
+                    msg: 'Failed to connect to database'
                 });
                 return;
             }
@@ -170,7 +170,7 @@ function tradeworkUpload(req, res, next) {
                     if (err) {
                         //handle error
                         state = 0;
-                        message = '用户添加交易画失败';
+                        message = err.code + ' ' + err.sqlMessage;
                         //delete file
                         fs.unlink(__dirname + '/../../public/img/' + req.file.filename);
                         res.json({
@@ -185,11 +185,11 @@ function tradeworkUpload(req, res, next) {
                             if (err)
                             {
                                 state = 0;
-                                message = '用户添加交易画重命名失败' + err;
+                                message = 'Failed to rename the painting';
                             }
                             else {
                                 state = 1;
-                                message = '用户添加交易画成功';
+                                message = 'Successfully uploaded a painting';
                             }
                             res.json({
                                 status: state,

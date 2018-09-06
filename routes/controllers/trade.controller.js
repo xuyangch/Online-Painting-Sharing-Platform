@@ -118,7 +118,7 @@ function initialTradePatch(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -132,7 +132,7 @@ function initialTradePatch(req, res, next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '加入Trade失败' + err.code + ' ' + err.sqlMessage;
+                        message = err.code + ' ' + err.sqlMessage;
                         res.json({status:status, msg:message});
                         connection.release();
                         return;
@@ -153,14 +153,14 @@ function initialTradePatch(req, res, next) {
                                 if (err) {
                                     //handle error
                                     status = 0;
-                                    message = '加入Trade成功，但是加入Tags给Trade失败';
+                                    message = 'Successfully added a trade，but failed to add a tag';
                                     res.json({status:status, msg:message});
                                     return;
                                 }
                                 if (result)
                                 {
                                     status = 1;
-                                    message = '加入Tags给Trade成功';
+                                    message = 'Successfully added a trade';
                                     res.json({status:status, msg:message});
                                     return;
                                 }
@@ -242,14 +242,16 @@ function getTrade(req, res, next) {
                             sql.getUserName,
                             [responderID, buyerID]
                             , function (err, result) {
-                                connection.release();
-                                if (result[0][0])
-                                    sendJSON.respondername = result[0][0].username;
-                                else sendJSON.respondername = null;
-                                if (result[1][0])
-                                    sendJSON.buyername = result[1][0].username;
-                                else sendJSON.buyername = null;
-                                res.render('getTrade', sendJSON);
+                                if (result) {
+                                    connection.release();
+                                    if (result[0][0])
+                                        sendJSON.respondername = result[0][0].username;
+                                    else sendJSON.respondername = null;
+                                    if (result[1][0])
+                                        sendJSON.buyername = result[1][0].username;
+                                    else sendJSON.buyername = null;
+                                    res.render('getTrade', sendJSON);
+                                }
                             }
                         );
                     }
@@ -274,7 +276,7 @@ function selectPainter(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -289,11 +291,11 @@ function selectPainter(req, res, next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '选择画家失败' + err.code + ' ' + err.sqlMessage;
+                        message = err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         status = 1;
-                        message = '选择画家成功';
+                        message = 'Successfully chose a painter';
                     }
                     res.json({
                         status : status,
@@ -322,7 +324,7 @@ function applyForTrade(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -337,11 +339,11 @@ function applyForTrade(req, res, next) {
                     if (err) {
                         // handle error                        
                         status = 0;
-                        message = '应聘交易失败' + err.code + ' ' + err.sqlMessage;
+                        message = err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         status = 1;
-                        message = '应聘交易成功';
+                        message = 'Successfully applied for a trade';
                     }
                     res.json({
                         status : status,
@@ -413,7 +415,7 @@ function cancelTrade(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -428,11 +430,11 @@ function cancelTrade(req, res, next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '取消交易失败' + err.code + ' ' + err.sqlMessage;
+                        message = err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         status = 1;
-                        message = '取消交易成功';
+                        message = 'Successfully canceled a trade';
                     }
                     res.json({
                         status : status,
@@ -460,7 +462,7 @@ function completeTrade(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -475,11 +477,11 @@ function completeTrade(req, res, next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '完成交易失败' + err.code + ' ' + err.sqlMessage;
+                        message = err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         status = 1;
-                        message = '完成交易成功';
+                        message = 'Successfully finished a trade';
                     }
                     res.json({
                         status : status,

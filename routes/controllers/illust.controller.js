@@ -77,7 +77,7 @@ function delTag(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -92,11 +92,11 @@ function delTag(req, res, next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '删除画tag失败';
+                        message = err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         status = 1;
-                        message = '删除画tag成功';
+                        message = 'Successfully remove a tag';
                     }
                     res.json({
                         status:status,
@@ -126,7 +126,7 @@ function addTag(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -140,12 +140,12 @@ function addTag(req, res, next) {
                     connection.release();
                     if (err) {
                         status = 0;
-                        message = '添加画tag失败';
+                        message = err.code + ' ' + err.sqlMessage;
                         // handle error
                     }
                     if (result) {
                         status = 1;
-                        message = '添加画tag成功';
+                        message = Successfully added a tag;
                     }
                     res.json({
                         status:status,
@@ -174,7 +174,7 @@ function upvote(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -189,11 +189,11 @@ function upvote(req, res, next) {
                     if (err) {
                         // handle error
                         status = 0;
-                        message = '点赞失败';
+                        message = 'Failed to like a painting';
                     }
                     else if (result) {
                         status = 1;
-                        message = '点赞成功';
+                        message = 'Successfully liked a painting';
                     }
                     res.json({
                         status:status,

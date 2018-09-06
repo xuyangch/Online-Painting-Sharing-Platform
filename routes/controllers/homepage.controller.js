@@ -150,7 +150,7 @@ function configUpload(req, res, next) {
             {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -169,7 +169,7 @@ function configUpload(req, res, next) {
                     {
                         //error handler
                         status = 0;
-                        message = '上传设置失败';
+                        message = err.code + ' ' + err.sqlMessage;
                         res.json(
                             {
                                 status : status,
@@ -180,7 +180,7 @@ function configUpload(req, res, next) {
                     if (result)
                     {
                         status = 1;
-                        message = '上传设置成功';
+                        message = 'Successfully uploaded configs';
                         res.json(
                             {
                                 status : status,
@@ -212,7 +212,7 @@ function passwordUpload(req, res, next) {
             {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -228,7 +228,7 @@ function passwordUpload(req, res, next) {
                     {
                         //error handler
                         status = 0;
-                        message = '上传密码失败';
+                        message = err.code + ' ' + err.sqlMessage;
                         res.json(
                             {
                                 status : status,
@@ -239,7 +239,7 @@ function passwordUpload(req, res, next) {
                     if (result)
                     {
                         status = 1;
-                        message = '上传密码成功';
+                        message = 'Successfully uploaded password';
                         res.json(
                             {
                                 status : status,
@@ -312,7 +312,7 @@ function addFollowing(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -336,12 +336,12 @@ function addFollowing(req, res, next) {
                         if (err) {
                             //handle error
                             status = 0;
-                            message = '添加关注人失败';
+                            message = err.code + ' ' + err.sqlMessage;
                         }
                         if (result) {
                             //res.render('following', {})
                             status = 1;
-                            message = '添加关注人成功';
+                            message = 'Successfully followed a user';
                         }
                         res.json({
                             status : status,
@@ -371,7 +371,7 @@ function delFollowing(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -386,12 +386,12 @@ function delFollowing(req, res, next) {
                     if (err) {
                         //handle error
                         status = 0;
-                        message = '删除关注人失败';
+                        message = err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         //res.render('following', {})
                         status = 1;
-                        message = '删除关注人成功';
+                        message = 'Successfully unfollowed a user';
                     }
                     res.json({
                         status:status,
@@ -462,7 +462,7 @@ function addCollecting(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -477,12 +477,12 @@ function addCollecting(req, res, next) {
                     if (err) {
                         //handle error
                         status = 0;
-                        message = '添加收藏画失败';
+                        message = err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         //res.render('following', {})
                         status = 1;
-                        message = '添加收藏画成功';
+                        message = 'Successfully added collections';
                     }
                     res.json({
                         status : status,
@@ -509,7 +509,7 @@ function delCollecting(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -524,12 +524,12 @@ function delCollecting(req, res, next) {
                     if (err) {
                         //handle error
                         status = 0;
-                        message = '删除收藏画失败';
+                        message = err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         //res.render('following', {})
                         status = 1;
-                        message = '删除收藏画成功';
+                        message = 'Successfully deleted collections';
                     }
                     res.json({
                         status : status,
@@ -637,7 +637,7 @@ function delContribute(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '连接数据库失败';
+                message = 'Failed to connect to database';
                 res.json({
                     status : status,
                     msg: message
@@ -652,18 +652,18 @@ function delContribute(req, res, next) {
                     if (err) {
                         //handle error
                         status = 0;
-                        message = '用户删除画失败';
+                        message = err.code + ' ' + err.sqlMessage;
                     }
                     if (result) {
                         //res.render('following', {})
                         try {
                             fs.unlinkSync(__dirname + '/../../public' + result[0].paintingurl);
                             status = 1;
-                            message = '用户删除画成功';
+                            message = 'Successfully deleted painting';
                         } catch (err) {
                             if (err.code == 'ENOENT')
                             {
-                                message = '用户删除画不存在';
+                                message = 'Painting does not exist!';
                             }
                         }
                     }
@@ -693,7 +693,7 @@ function charge(req, res, next) {
             if (err) {
                 // handle error
                 status = 0;
-                message = '数据库连接失败';
+                message = 'Failed to connect to database';
                 res.json(
                     {
                         status: status,
@@ -708,11 +708,11 @@ function charge(req, res, next) {
                     connection.release();
                     if (err) {
                         status = 0;
-                        message = '添加钱失败';
+                        message = 'Failed to add fund';
                     }
                     else {
                         status = 1;
-                        message = '添加钱成功';
+                        message = 'Successfully added fund';
                     }
                     res.json(
                         {

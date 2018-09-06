@@ -39,7 +39,7 @@ function register(req, res, next) {
         if (err) {
             // handle error
             status = 0;
-            message = '连接数据库失败';
+            message = 'Failed to connect to database';
             res.json({
                 status : status,
                 msg: message
@@ -53,21 +53,21 @@ function register(req, res, next) {
                 if (err) {
                     // handle error
                     status = 0;
-                    message = '用户注册失败';
+                    message = err.code + ' ' + err.sqlMessage;
                 }
                 if (result) {
                     status = 1;
-                    message = '用户注册成功';
+                    message = 'Successfully signed up!';
                     fs.copy(__dirname + '/../../public/img/default_header.png', __dirname + '/../../public/img/header/' + (result[1][0].userID).toString() + '.png',
                         function(err) {
                             if (err)
                             {
                                 status = 0;
-                                message = '头像重命名失败';
+                                message = 'Failed to rename the profile image';
                             }
                             else {
                                 status = 1;
-                                message = '用户注册成功';
+                                message = 'Successfully signed up!';
                             }
                         });
                 }
