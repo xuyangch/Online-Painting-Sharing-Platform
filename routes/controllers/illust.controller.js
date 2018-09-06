@@ -145,7 +145,7 @@ function addTag(req, res, next) {
                     }
                     if (result) {
                         status = 1;
-                        message = Successfully added a tag;
+                        message = 'Successfully added a tag';
                     }
                     res.json({
                         status:status,
