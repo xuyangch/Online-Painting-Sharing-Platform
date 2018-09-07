@@ -1,8 +1,11 @@
+# Online Painting Sharing Platform
+Vixip is a social network that allows people to share, trade, search and add tags for their paintings. The initial 10 GB of the data of users and paintings are crawled from Pixiv. The website is developed using HTML, CSS, JavaScript and MySQL.
+
 # Table of Contents
 <!-- TOC -->
 
-- [Table of Contents](#table-of-contents)
 - [Online Painting Sharing Platform](#online-painting-sharing-platform)
+- [Table of Contents](#table-of-contents)
 - [Starting the Node Server](#starting-the-node-server)
 - [Website Screenshots](#website-screenshots)
     - [Login](#login)
@@ -33,8 +36,7 @@
             - [Functions and Procedures Related to Paintings and Users](#functions-and-procedures-related-to-paintings-and-users)
 
 <!-- /TOC -->
-# Online Painting Sharing Platform
-Vixip is a social network that allows people to share, trade, search and add tags for their paintings. The initial 10 GB of the data of users and paintings are crawled from Pixiv. The website is developed using HTML, CSS, JavaScript and MySQL.
+
 # Starting the Node Server
 To run the node server, you' ll need to first change the setting of MySQL database in app.js and dbconfig/pool.js. Then, in the project root folder, simply type:
 ```
