@@ -1,5 +1,38 @@
+<!-- TOC -->
+
+- [Online Painting Sharing Platform](#online-painting-sharing-platform)
+- [Starting the Node Server](#starting-the-node-server)
+- [Website Screenshots](#website-screenshots)
+    - [Login](#login)
+    - [Sign Up](#sign-up)
+    - [Homepage](#homepage)
+    - [User Add Upload Page](#user-add-upload-page)
+    - [User All Uploads Page](#user-all-uploads-page)
+    - [User Collection Page](#user-collection-page)
+    - [User Following Page](#user-following-page)
+    - [User Setting Page](#user-setting-page)
+    - [Painting Homepage](#painting-homepage)
+    - [Painting Search Page](#painting-search-page)
+    - [User Search Page](#user-search-page)
+    - [Trade Search Page](#trade-search-page)
+    - [User' s Trade Page](#user-s-trade-page)
+    - [All Trades Page](#all-trades-page)
+    - [Trade Initialization Page](#trade-initialization-page)
+    - [Trade Detail Page](#trade-detail-page)
+    - [User Upload for Trade Page](#user-upload-for-trade-page)
+- [Brief Introduction](#brief-introduction)
+    - [E/R Model of the System](#er-model-of-the-system)
+    - [State Transition Diagram for Trading System](#state-transition-diagram-for-trading-system)
+    - [Triggers, Events, Functions and Procedures for Database](#triggers-events-functions-and-procedures-for-database)
+        - [Triggers](#triggers)
+        - [Events](#events)
+        - [Functions and Procedures](#functions-and-procedures)
+            - [Functions and Procedures Related to Trades](#functions-and-procedures-related-to-trades)
+            - [Functions and Procedures Related to Paintings and Users](#functions-and-procedures-related-to-paintings-and-users)
+
+<!-- /TOC -->
 # Online Painting Sharing Platform
-Vixip is a social network that allows people to share, trade, search and add tags for their paintings. The website is developed using HTML, CSS, JavaScript and SQL.
+Vixip is a social network that allows people to share, trade, search and add tags for their paintings. The initial 10 GB of the data of users and paintings are crawled from Pixiv. The website is developed using HTML, CSS, JavaScript and MySQL.
 # Starting the Node Server
 To run the node server, you' ll need to first change the setting of MySQL database in app.js and dbconfig/pool.js. Then, in the project root folder, simply type:
 ```
@@ -16,15 +49,46 @@ npm start
 ## Homepage
 ![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/homepage.png)
 
-## Add Upload Page
+## User Add Upload Page
 ![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/pageupload.png)
 
-## All Uploads Page
+## User All Uploads Page
 ![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/alluploads.png)
 
 ## User Collection Page
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/usercollection.png)
 
+## User Following Page
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/userfollowing.png)
 
+## User Setting Page
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/usersetting.png)
+
+## Painting Homepage
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/painting.png)
+
+## Painting Search Page
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/paintingsearch.png)
+
+## User Search Page
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/usersearch.png)
+
+## Trade Search Page
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/tradesearch.png)
+
+## User' s Trade Page
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/trade.png)
+ ## All Trades Page
+ ![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/alltrades.png)
+
+## Trade Initialization Page
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/inittrade.png)
+
+## Trade Detail Page
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/tradedetail.png)
+
+## User Upload for Trade Page
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/uploadtrade.png)
 
 # Brief Introduction
 ## E/R Model of the System
