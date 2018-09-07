@@ -73,6 +73,8 @@ create index painter_apply_for_trade_trade_fk
 	on painter_apply_for_trade (trade)
 ;
 
+delimiter //
+
 create trigger return_money_for_painter
              after DELETE on painter_apply_for_trade
              for each row
@@ -80,13 +82,15 @@ BEGIN
     DECLARE price_trade DOUBLE;
     SET price_trade = (SELECT price FROM trade WHERE id = OLD.trade);
     UPDATE painter SET money = money + price_trade/4, frozen_money = frozen_money -price_trade/4 WHERE id = OLD.painter;
-  END;
+  END;//
+
+delimiter ; //
 
 create table painting
 (
 	id int not null auto_increment
 		primary key,
-	topic varchar(20) not null,
+	topic varchar(100) not null,
 	upload_time datetime default CURRENT_TIMESTAMP not null,
 	width int default '0' null,
 	length int default '0' null,
@@ -120,6 +124,7 @@ create index painting_tag_tag_tag_fk
 	on painting_tag (tag)
 ;
 
+delimiter //
 create trigger add_tag_for_painting
              before INSERT on painting_tag
              for each row
@@ -131,7 +136,9 @@ BEGIN
     )) THEN
       INSERT INTO tag (tag) VALUES (NEW.tag);
     END IF;
-  END;
+  END; //
+
+delimiter ; //
 
 create table tag
 (
@@ -173,6 +180,8 @@ create index trade_responder_fk
 	on trade (responder)
 ;
 
+delimiter //
+
 create trigger froze_money_trigger
              after INSERT on trade
              for each row
@@ -181,7 +190,9 @@ BEGIN
       SET money = money - NEW.price,
           frozen_money = frozen_money + NEW.price
     WHERE id = NEW.buyer;
-  END;
+  END;//
+
+delimiter //
 
 create trigger check_validity_trade_trigger
              before INSERT on trade
@@ -193,7 +204,9 @@ BEGIN
       set msg = 'check_validity_trade_trigger Error, trade not valid';
       signal sqlstate '45000' set message_text = msg;
     END IF;
-  END;
+  END;//
+
+delimiter ; //
 
 alter table painter_apply_for_trade
 	add constraint painter_apply_for_trade_trade_fk
@@ -216,6 +229,8 @@ create index trade_tag_tag_fk
 	on trade_tag (tag)
 ;
 
+delimiter //
+
 create trigger add_tag_for_trade_trigger
              before INSERT on trade_tag
              for each row
@@ -227,7 +242,9 @@ BEGIN
     )) THEN
       INSERT INTO tag (tag) VALUES (NEW.tag);
     END IF;
-  END;
+  END;//
+
+delimiter ; //
 
 create table upvote
 (
@@ -266,6 +283,8 @@ create index user_user_type_type_fk
 	on user (type)
 ;
 
+delimiter //
+
 create trigger ensure_alipay_regist
              before INSERT on user
              for each row
@@ -279,7 +298,9 @@ BEGIN
         signal sqlstate '45000' set message_text = msg;
       END IF;
     END IF;
-  END;
+  END;//
+
+delimiter //
 
 create trigger add_user_info
              after INSERT on user
@@ -298,7 +319,9 @@ BEGIN
 
     END IF;
 
-  END;
+  END;//
+
+delimiter ; //
 
 alter table buyer
 	add constraint buyer_user_id_fk
@@ -342,6 +365,8 @@ alter table user
 		foreign key (type) references dbproject.user_type (type)
 ;
 
+delimiter //
+
 create procedure addContribute (IN in_topic varchar(20), IN in_user int, IN in_format varchar(5), OUT p_id int)  
 BEGIN
     START TRANSACTION ;
@@ -359,7 +384,9 @@ BEGIN
     INSERT INTO contribute (user, painting) VALUES (in_user,p_id);
     END ;
     COMMIT ;
-  END;
+  END;//
+
+delimiter //
 
 create procedure addTrade (IN in_des varchar(500), IN in_pri double, IN in_ddl datetime, IN in_sta varchar(20), IN in_buyer int, OUT tradeID int)  
 BEGIN
@@ -375,7 +402,9 @@ BEGIN
     SET tradeID = (SELECT max(id) FROM trade);
     END ;
     COMMIT ;
-  END;
+  END;//
+
+delimiter //
 
 create procedure addTradeWork (IN in_painterID int, IN in_tradeID int, IN in_format varchar(5))  
 BEGIN
@@ -387,7 +416,9 @@ BEGIN
     ELSE 
       SIGNAL SQLSTATE '45001' SET MESSAGE_TEXT = "Add Trade Work Error: Illigal Status!";
     END IF ;
-  END;
+  END;//
+
+delimiter //
 
 create procedure addUser (IN in_username varchar(50), IN in_type char, IN in_password varchar(15), IN in_alipay varchar(50), OUT userID int)  
 BEGIN
@@ -398,7 +429,9 @@ BEGIN
       UPDATE user SET icon = (concat('/img/header/',userID,'.png')) WHERE id = userID;
     END;
     COMMIT;
-  END;
+  END;//
+
+delimiter //
 
 create procedure buyer_add_money (IN buyer_id int, IN money_added double)  
 BEGIN
@@ -413,7 +446,9 @@ BEGIN
         SET money = money + money_added
       WHERE id = buyer_id;
     END IF;
-  END;
+  END;//
+
+delimiter //
 
 create procedure buyer_decide_painter (IN in_tradeID int, IN in_painterID int, IN in_buyerID int)  
 BEGIN
@@ -436,7 +471,9 @@ BEGIN
     SET price_for_trade = (SELECT price FROM trade WHERE id = in_tradeID);
     DELETE FROM painter_apply_for_trade WHERE trade = in_tradeID;
     UPDATE painter SET money = money - price_for_trade/4, frozen_money = frozen_money + price_for_trade/4 WHERE id = in_painterID;
-  END;
+  END;//
+
+delimiter //
 
 create procedure cancelTrade (IN in_userID int, IN in_tradeID int)  
 BEGIN
@@ -491,7 +528,9 @@ BEGIN
       SIGNAL SQLSTATE '45001' SET MESSAGE_TEXT = "Cancel Trade Error: Can not cancel at current state!";
     END IF;
     END IF;
-  END;
+  END;//
+
+delimiter //
 
 create function checkUserPassword (in_username varchar(50), in_userpassword varchar(15)) returns int 
 BEGIN
@@ -506,7 +545,9 @@ BEGIN
       SET userID = -1;
     END IF;
     RETURN userID;
-  END;
+  END;//
+
+delimiter //
 
 create procedure completeTrade (IN in_buyerID int, IN in_tradeID int)  
 BEGIN
@@ -526,7 +567,9 @@ BEGIN
     UPDATE buyer SET frozen_money = frozen_money - found_price WHERE id = in_buyerID;
     UPDATE painter SET money = money + 5*(found_price/4) WHERE id = found_responder;
     UPDATE painter SET frozen_money = (frozen_money - (found_price/4)) WHERE id = found_responder;
-  END;
+  END;//
+
+delimiter //
 
 create function delContribute (paintingID int, userID int) returns varchar(128) 
 BEGIN
@@ -557,7 +600,9 @@ BEGIN
 
     END IF;
 
-  END;
+  END;//
+
+delimiter //
 
 create function delPaintingTag (in_paintingID int, in_paintingTag varchar(20), in_userID int) returns int 
 BEGIN
@@ -580,7 +625,9 @@ BEGIN
       SET status = 1;
       RETURN status;
     END IF;
-  END;
+  END;//
+
+delimiter //  
 
 create function getBuyerFlag (in_userID int) returns int 
 BEGIN
@@ -591,12 +638,16 @@ BEGIN
     ELSE 
       RETURN 0;
     END IF;
-  END;
+  END;//
+
+delimiter //
 
 create function getInUser () returns int 
 BEGIN 
     RETURN @inuserid;
-  END;
+  END;//
+
+delimiter //
 
 create procedure getRelatedTrades ()  
 BEGIN
@@ -611,7 +662,9 @@ BEGIN
     ELSE
       SIGNAL SQLSTATE '45001' SET MESSAGE_TEXT  = "Get Related Trade Error: Not buyer or painter";
     END IF;
-  END;
+  END;//
+
+delimiter //
 
 create procedure getTradeUrl (IN in_userID int, IN in_tradeID int, OUT out_url varchar(128))  
 BEGIN
@@ -620,7 +673,9 @@ BEGIN
     ELSE
       SET out_url = (SELECT upload_file_route FROM trade WHERE id = in_tradeID);
     END IF;
-  END;
+  END;//
+
+delimiter //
 
 create procedure getUserMoney (IN userID int, OUT frozenMoney double, OUT currentMoney double)  
 BEGIN
@@ -634,7 +689,9 @@ BEGIN
       SET frozenMoney = (SELECT frozen_money FROM painter WHERE id = userID);
       SET currentMoney = (SELECT money FROM painter WHERE id = userID);
     END IF;
-  END;
+  END;//
+
+delimiter //
 
 create procedure modifyResolution (IN in_length int, IN in_width int, IN in_userID int, IN in_paintingID int)  
 BEGIN 
@@ -642,7 +699,9 @@ BEGIN
       SIGNAL SQLSTATE '45001' SET MESSAGE_TEXT = "Modify Resolution Error: User Do Not Have Authority";
     END IF;
     UPDATE painting SET length = in_length, width = in_width WHERE id = in_paintingID;
-  END;
+  END;//
+
+delimiter //
 
 create function modifyUserPassword (in_oldUserPassword varchar(15), in_newUserPassword varchar(15), in_userID int) returns int 
 BEGIN
@@ -656,7 +715,9 @@ BEGIN
       SIGNAL SQLSTATE '45001' SET message_text = msg;
     END IF;
     RETURN 1;
-  END;
+  END;//
+
+delimiter //
 
 create procedure painter_apply_for_trade (IN in_painterID int, IN in_tradeID int)  
 BEGIN 
@@ -676,7 +737,9 @@ BEGIN
     END IF;
     UPDATE painter SET money = money - price_for_trade/4, frozen_money = frozen_money + price_for_trade/4 WHERE id = in_painterID;
     INSERT INTO painter_apply_for_trade (painter, trade) VALUES (in_painterID,in_tradeID);
-  END;
+  END;//
+
+delimiter //
 
 CREATE EVENT ddl_exceeds
   ON SCHEDULE
@@ -710,4 +773,6 @@ CREATE EVENT ddl_exceeds
       END IF;
     END LOOP read_loop;
     CLOSE rs;
-  END;
+  END;//
+
+  delimiter ;
