@@ -6,6 +6,26 @@ To run the node server, you' ll need to first change the setting of MySQL databa
 npm install
 npm start
 ```
+# Website Screenshots
+:warning: Since all URLs have now been modified to follow REST API design pattern, all current URLs of Vixip may be different from the URLs shown in the screenshots.
+## Login
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/alluploads.png)
+## Sign Up
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/signup.png)
+
+## Homepage
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/homepage.png)
+
+## Add Upload Page
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/pageupload.png)
+
+## All Uploads Page
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/alluploads.png)
+
+## User Collection Page
+
+
+
 # Brief Introduction
 ## E/R Model of the System
 ![](https://github.com/chyacinth/MarkdownPhotos/blob/master/vixip/er_graph.png?raw=true)
@@ -57,7 +77,7 @@ To ensure data integrity, there are a great number of triggers, events, function
 | DDL_exceeds | Called every 5 minutes and will read each entry in the trading table to check whether any trade has met its deadline and will cancel or finish the trade according to its status. |
 
 ### Functions and Procedures
-:warning Input and output arguments are omitted. If you are interested in the detail of functions and procedures, see the [code](https://github.com/chyacinth/Online-Painting-Sharing-Platform/blob/master/additional/dbCode/database_v2.5.sql) for database establishment.
+:warning: Input and output arguments are omitted. If you are interested in the detail of functions and procedures, see the [code](https://github.com/chyacinth/Online-Painting-Sharing-Platform/blob/master/additional/dbCode/database_v2.5.sql) for database establishment.
 #### Functions and Procedures Related to Trades 
 | Functions or Procedure Name   | Usage |
 | -------------------- | ---------------- |
@@ -83,9 +103,3 @@ To ensure data integrity, there are a great number of triggers, events, function
 |getBuyerFlag|Return whether the user is buyer.|
 |modifyResolution|Modify the resolution of a painting. Perform privilege check (only the owner of the painting has the privilege).|
 |modifyUserPassword|Check whether old password matches username. Then modifies user password. |
-
-
-# Website Screenshots
-## Login
-## Homepage
-![](https://github.com/chyacinth/MarkdownPhotos/blob/master/vixip/er_graph.png?raw=true)
