@@ -19,7 +19,7 @@ The diagram clearly demonstrates what how each entities are formed in our databa
 
 ## State Transition Diagram for Trading System
 The trading system in the website mimics how a trade works in real word.
-![](https://github.com/chyacinth/MarkdownPhotos/blob/master/vixip/trade_state_transfer.png?raw=true | width=250)
+![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/trade_state_transfer.png | width=250)
 
 
 [0] Freeze the buyer's funds equaling to the trade price as deposit
