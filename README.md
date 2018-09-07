@@ -1,5 +1,7 @@
+# Table of Contents
 <!-- TOC -->
 
+- [Table of Contents](#table-of-contents)
 - [Online Painting Sharing Platform](#online-painting-sharing-platform)
 - [Starting the Node Server](#starting-the-node-server)
 - [Website Screenshots](#website-screenshots)
