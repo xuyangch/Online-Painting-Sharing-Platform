@@ -659,8 +659,6 @@ BEGIN
       DROP VIEW IF EXISTS buyerTradeInfo;
       CREATE VIEW buyerTradeInfo AS SELECT buyer, deadline AS ddl, price, status AS state, username AS buyername, 'buyer' AS relation, t.id AS tradeID FROM trade t, user u WHERE t.buyer = getInUser() and t.buyer = u.id;
       SELECT * FROM buyerTradeInfo;
-    ELSE
-      SIGNAL SQLSTATE '45001' SET MESSAGE_TEXT  = "Get Related Trade Error: Not buyer or painter";
     END IF;
   END;//
 

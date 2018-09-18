@@ -367,6 +367,7 @@ function tradeHomepage(req, res, next) {
     var getID = req.query.userID;
     if (!getID) getID = userID;
     if (userID) {
+        console.log(userID);
         pool.getConnection(function (err, connection) {
             if (err) {
                 // handle error
@@ -374,9 +375,9 @@ function tradeHomepage(req, res, next) {
                 return;
             }
             connection.query(
-                sql.getRelatedTrades +
                 sql.getUserName +
-                sql.getUserHeader,
+                sql.getUserHeader +
+                sql.getRelatedTrades,
                 [getID,getID,getID]
                 , function (err, result) {
                     connection.release();
@@ -385,12 +386,14 @@ function tradeHomepage(req, res, next) {
                         res.render('error');
                     }
                     if (result) {
+                        console.log(result);
                         //if (result[1][0] == null)
                           //  result[1] = [];
-                        res.render('tradeHomepage',{
-                            trade:result[1],
-                            username: result[3][0].username,
-                            user_header:result[4][0].user_header,
+                        console.log(result.length >= 4?result[3]:[]);
+                        res.render('tradeHomepage',{                            
+                            trade:result.length >= 4?result[3]:[],
+                            username: result[0][0].username,
+                            user_header:result[1][0].user_header,
                             userID: getID
                         });
                     }
