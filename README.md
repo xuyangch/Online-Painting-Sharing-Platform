@@ -1,9 +1,6 @@
 # Online Painting Sharing Platform
 Vixip is a social network that allows people to share, trade, search and add tags for their paintings. The initial 10 GB of the data of users and paintings are crawled from Pixiv. The website is developed using HTML, CSS, JavaScript and MySQL.
 
-# Table of Contents
-<!-- TOC -->autoauto- [Online Painting Sharing Platform](#online-painting-sharing-platform)auto- [Table of Contents](#table-of-contents)auto- [Starting the Node Server](#starting-the-node-server)auto- [Website Screenshots](#website-screenshots)auto    - [Login](#login)auto    - [Sign Up](#sign-up)auto    - [Homepage](#homepage)auto    - [User Add Upload Page](#user-add-upload-page)auto    - [User All Uploads Page](#user-all-uploads-page)auto    - [User Collection Page](#user-collection-page)auto    - [User Following Page](#user-following-page)auto    - [User Setting Page](#user-setting-page)auto    - [Painting Homepage](#painting-homepage)auto    - [Painting Search Page](#painting-search-page)auto    - [User Search Page](#user-search-page)auto    - [Trade Search Page](#trade-search-page)auto    - [User' s Trade Page](#user-s-trade-page)auto    - [Trade Initialization Page](#trade-initialization-page)auto    - [Trade Detail Page](#trade-detail-page)auto    - [User Upload for Trade Page](#user-upload-for-trade-page)auto- [Brief Introduction](#brief-introduction)auto    - [E/R Model of the System](#er-model-of-the-system)auto    - [State Transition Diagram for Trading System](#state-transition-diagram-for-trading-system)auto    - [Triggers, Events, Functions and Procedures for Database](#triggers-events-functions-and-procedures-for-database)auto        - [Triggers](#triggers)auto        - [Events](#events)auto        - [Functions and Procedures](#functions-and-procedures)auto            - [Functions and Procedures Related to Trades](#functions-and-procedures-related-to-trades)auto            - [Functions and Procedures Related to Paintings and Users](#functions-and-procedures-related-to-paintings-and-users)autoauto<!-- /TOC -->
-
 # Starting the Node Server
 To run the node server, you' ll need to first change the setting of MySQL database in app.js and dbconfig/pool.js. Then, in the project root folder, simply type:
 ```
@@ -49,9 +46,7 @@ npm start
 ![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/usercollection.png)
 
 ## User Following Page
-
 `url: /homepage/following/:userID`
-
 ![](https://raw.githubusercontent.com/chyacinth/MarkdownPhotos/master/vixip/screenshots/userfollowing.png)
 
 ## User Setting Page
